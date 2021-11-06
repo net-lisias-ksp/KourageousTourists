@@ -23,7 +23,7 @@
 
 */
 using Asset = KSPe.IO.Asset<KourageousTourists.Startup>;
-using Data = KSPe.IO.Data<KourageousTourists.Startup>;
+using Data = KSPe.IO.Save<KourageousTourists.Startup>;
 
 namespace KourageousTourists
 {
