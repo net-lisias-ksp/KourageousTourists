@@ -56,6 +56,7 @@
     <Compile Include="Settings.cs" />
     <Compile Include="EVASupport.cs" />
     <Compile Include="Properties\LegalMamboJambo.cs" />
+    <Compile Include="GUI\MissingDLLAlertBox.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
