@@ -1,5 +1,8 @@
 # Kourageous Tourists /L Unleashed :: Change Log
 
+* 2021-1105: 0.5.3.0 (Lisias) for KSP >= 1.3
+	+ Updating the code to the new KSPe v2.4 facilites
+	+ Moving the Settings to the current game's `saves` folder, allowing customisations per savegame.
 * 2021-0220: 0.5.2.2 (Lisias) for KSP >= 1.3
 	+ Add Support for every KSP Version since 1.3
 		- Support for RealChutes is WorkInProgress, but you can try it nevertheless on KSP 1.3... ]:->
