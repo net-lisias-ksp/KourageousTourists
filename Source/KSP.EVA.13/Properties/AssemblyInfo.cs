@@ -4,13 +4,13 @@ using System.Runtime.CompilerServices;
 // Information about this assembly is defined by the following attributes. 
 // Change them to the values specific to your project.
 
-[assembly: AssemblyTitle("KSP.EVA.13")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("KourageousTourists.KSP.EVA.13")]
+[assembly: AssemblyDescription("Kourageous Tourists /L KSP 1.3 EVA Support")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("")]
-[assembly: AssemblyCopyright("${AuthorCopyright}")]
-[assembly: AssemblyTrademark("")]
+[assembly: AssemblyCompany (KourageousTourists.LegalMamboJambo.Company)]
+[assembly: AssemblyProduct (KourageousTourists.LegalMamboJambo.Product)]
+[assembly: AssemblyCopyright (KourageousTourists.LegalMamboJambo.Copyright)]
+[assembly: AssemblyTrademark (KourageousTourists.LegalMamboJambo.Trademark)]
 [assembly: AssemblyCulture("")]
 
 // The assembly version has the format "{Major}.{Minor}.{Build}.{Revision}".

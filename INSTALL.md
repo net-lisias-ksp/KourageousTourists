@@ -1,8 +1,8 @@
-# Kourageous Tourists /L Unofficial
+# Kourageous Tourists /L Unleashed
 
 Tourists sometimes should be able to go EVA. Now they can.
 
-Unofficial fork by Lisias.
+[Unleashed](https://ksp.lisias.net/add-ons-unleashed/) fork by Lisias.
 
 
 ## Installation Instructions

@@ -1,4 +1,4 @@
-# Kourageus Tourists :: Known Issues
+# Kourageus Tourists /L Unleashed :: Known Issues
 
 * The timing between the command to take the Selfie and the emotions being applied to the EVAing tourists are far from perfect, but appears to be better now (as all Kerbals were being photograged before the emotinos could be executed!)
 	+ I mamaged to almost sync them with few Kerbals, but as more Kerbals are present on the Scene, more the chances of missing the emotions of most of them.

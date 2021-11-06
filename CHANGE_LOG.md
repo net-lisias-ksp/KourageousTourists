@@ -1,4 +1,4 @@
-# Kourageous Tourists :: Change Log
+# Kourageous Tourists /L Unleashed :: Change Log
 
 * 2021-0220: 0.5.2.2 (Lisias) for KSP >= 1.3
 	+ Add Support for every KSP Version since 1.3
