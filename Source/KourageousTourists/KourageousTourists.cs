@@ -82,7 +82,7 @@ namespace KourageousTourists
 
 			bool forceTouristsInSandbox = false;
 
-			ConfigNode config = Settings.Read();
+			ConfigNode config = Settings.Instance.Read();
 
 			if (config == null)
 			{

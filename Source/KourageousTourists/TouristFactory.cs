@@ -91,7 +91,7 @@ namespace KourageousTourists
 		private bool readConfig()
 		{
 			Log.dbg("reading config");
-			ConfigNode config = Settings.Read();
+			ConfigNode config = Settings.Instance.Read();
 
 			if (config == null) {
 				Log.dbg("no config found in game database");

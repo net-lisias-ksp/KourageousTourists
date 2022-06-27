@@ -22,16 +22,33 @@
 	If not, see <https://www.gnu.org/licenses/>.
 
 */
+using System;
+
 using Asset = KSPe.IO.Asset<KourageousTourists.Startup>;
 using Data = KSPe.IO.Save<KourageousTourists.Startup>;
 
 namespace KourageousTourists
 {
-	internal static class Settings
+	internal class Settings
 	{
-		private static readonly Data.ConfigNode SETTINGS = Data.ConfigNode.For(KourageousTouristsAddOn.cfgRoot, "Kourage.cfg");
+		private static Settings instance = null;
+		internal static Settings Instance = instance ?? (instance = new Settings());
 
-		internal static ConfigNode Read()
+		private readonly Data.ConfigNode SETTINGS = Data.ConfigNode.For(KourageousTouristsAddOn.cfgRoot, "Kourage.cfg");
+		private Settings()
+		{
+			GameEvents.onGameStatePostLoad.Add(this.OnGameStatePostLoad);
+		}
+
+		private void OnGameStatePostLoad(ConfigNode data)
+		{	// A new savegame was loaded.
+			// The current instance is not valid anymore!
+			// Kill ourselves, and let the new generation take over!
+			GameEvents.onGameStatePostLoad.Remove(this.OnGameStatePostLoad);
+			instance = null;
+		}
+
+		internal ConfigNode Read()
 		{
 			if (!SETTINGS.IsLoadable)
 			{
