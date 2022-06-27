@@ -37,7 +37,7 @@ namespace KourageousTourists.KSP.Chute.RealChute13
 
 		public bool hasChute(Vessel v)
 		{
-			return false; // TODO Implement this for Real Chute!!
+			return v.evaController.part.Modules.Contains("RealChuteModule");
 		}
 
 		public IEnumerator deployChute(Vessel v, float paraglidingDeployDelay, float paraglidingChutePitch) {
@@ -49,12 +49,13 @@ namespace KourageousTourists.KSP.Chute.RealChute13
 			Log.detail("checking chute module...");
 			RealChuteModule chuteModule = (RealChuteModule)v.evaController.part.Modules["RealChuteModule"];
 			Log.detail("deployment state: armed {0}; enabled: {1}", chuteModule.armed, chuteModule.enabled);
-			//chuteModule.deploymentSafeState = ModuleParachute.deploymentSafeStates.UNSAFE; // FIXME: is it immediate???
+			chuteModule.safeState = SafeState.DANGEROUS;
+			chuteModule.ActivateRC();
 
 			Log.detail("counting {0} sec...", paraglidingDeployDelay);
 			yield return new WaitForSeconds (paraglidingDeployDelay); // 5 seconds to deploy chute. TODO: Make configurable
 			Log.detail("Deploying chute");
-			chuteModule.ActivateRC();
+			chuteModule.GUIDeploy();
 
 			// Set low forward pitch so uncontrolled kerbal doesn't gain lot of speed
 			//chuteModule.chuteDefaultForwardPitch = paraglidingChutePitch;
