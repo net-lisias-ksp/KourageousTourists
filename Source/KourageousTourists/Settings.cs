@@ -34,35 +34,48 @@ namespace KourageousTourists
 		private static Settings instance = null;
 		internal static Settings Instance = instance ?? (instance = new Settings());
 
-		private readonly Data.ConfigNode SETTINGS = Data.ConfigNode.For(KourageousTouristsAddOn.cfgRoot, "Kourage.cfg");
+		private Data.ConfigNode settings;
 		private Settings()
 		{
-			GameEvents.onGameStatePostLoad.Add(this.OnGameStatePostLoad);
+			GameEvents.onGameStatePostLoad.Add(this.onGameStateCreated);
 		}
 
-		private void OnGameStatePostLoad(ConfigNode data)
-		{	// A new savegame was loaded.
+		~Settings()
+		{
+			GameEvents.onGameStatePostLoad.Remove(this.onGameStateCreated);
+		}
+
+		private void onGameStateCreated(ConfigNode data)
+		{
+			Log.dbg("onGameStateCreated {0}", data.GetValue("Tittle"));
+			// A new savegame was loaded.
 			// The current instance is not valid anymore!
 			// Kill ourselves, and let the new generation take over!
-			GameEvents.onGameStatePostLoad.Remove(this.OnGameStatePostLoad);
 			instance = null;
 		}
 
-		internal ConfigNode Read()
-		{
-			if (!SETTINGS.IsLoadable)
-			{
-				Asset.ConfigNode defaults = Asset.ConfigNode.For(KourageousTouristsAddOn.cfgRoot, "Kourage.cfg");
-				if (!defaults.IsLoadable)
-				{
-					Log.error("Where is the default Kourage.cfg? Kourageous Tourists will not work properly without it!");
-					return null;
-				}
-				SETTINGS.Clear();
-				SETTINGS.Save(defaults.Load().Node);
-			}
+		internal ConfigNode Read() => HighLogic.LoadedSceneIsGame ? this.ReadFromSaveGame() : ReadFromDefaults();
 
-			return SETTINGS.Load().Node;
+		private ConfigNode ReadFromSaveGame()
+		{
+			this.settings = this.settings??Data.ConfigNode.For(KourageousTouristsAddOn.cfgRoot, "Kourage.cfg");
+			if (!this.settings.IsLoadable)
+			{
+				this.settings.Clear();
+				this.settings.Save(this.ReadFromDefaults());
+			}
+			return this.settings.Load().Node;
+		}
+
+		private ConfigNode ReadFromDefaults()
+		{
+			Asset.ConfigNode defaults = Asset.ConfigNode.For(KourageousTouristsAddOn.cfgRoot, "Kourage.cfg");
+			if (!defaults.IsLoadable)
+			{
+				Log.error("Where is the default Kourage.cfg? Kourageous Tourists will not work properly without it!");
+				return null;
+			}
+			return defaults.Load().Node;
 		}
 	}
 }

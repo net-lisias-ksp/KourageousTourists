@@ -158,11 +158,11 @@ namespace KourageousTourists
 		}
 
 		public void OnDestroy() {
+			if (!HighLogic.LoadedSceneIsGame || null == FlightGlobals.VesselsLoaded) return;
 
 			// Switch tourists back
 			Log.dbg("entered OnDestroy");
 			try {
-				if (null == FlightGlobals.VesselsLoaded) return;
 				Log.dbg("VesselsLoaded: {0}", FlightGlobals.VesselsLoaded);
 				foreach (Vessel v in FlightGlobals.VesselsLoaded) {
 					if (null == v) continue; // Weird behaviour on KSP 1.10?
@@ -531,7 +531,6 @@ namespace KourageousTourists
 
 			reinitVessel (vessel);
 			reinitEvents (vessel);
-
 		}
 
 		private void OnFlightReady()
