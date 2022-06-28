@@ -1,5 +1,8 @@
 # Kourageous Tourists /L Unleashed :: Changes
 
+* 2022-0627: 0.5.3.1 (Lisias) for KSP >= 1.3
+	+ Finally implementing full support for Real Chutes.
+	+ Fixing some mistakes on handling savegames and Module Manager 
 * 2021-1105: 0.5.3.0 (Lisias) for KSP >= 1.3
 	+ Updating the code to the new KSPe v2.4 facilites
 	+ Moving the Settings to the current game's `saves` folder, allowing * 2021-0220: 0.5.2.2 (Lisias) for KSP >= 1.3
