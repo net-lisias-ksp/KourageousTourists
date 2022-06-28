@@ -60,4 +60,10 @@ Global
 		{F18BC48B-BD4E-4764-BBE3-C07E1B4F7595} = {546FF1B4-7208-483E-BE1B-CF219DC058B5}
 		{23D01242-BC02-4629-B1E3-0F9FD121EAFC} = {546FF1B4-7208-483E-BE1B-CF219DC058B5}
 	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		Policies = $0
+		$0.TextStylePolicy = $1
+		$1.FileWidth = 132
+		$1.scope = text/plain
+	EndGlobalSection
 EndGlobal

@@ -4,7 +4,7 @@ obj
 Archive/*
 GameData/INSTALL.md
 GameData/**/*.dll
-GameData/**/*LICENSE
+GameData/**/LICENSE*
 GameData/**/NOTICE
 GameData/**/README.md
 GameData/**/CHANGE_LOG.md
