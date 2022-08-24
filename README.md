@@ -1,21 +1,19 @@
-# Kourageus Tourists /L Unleashed
+# Kourageus Tourists /L
 
 Tourists sometimes should be able to go EVA. Now they can.
 
-[Unleashed](https://ksp.lisias.net/add-ons-unleashed/) fork by Lisias.
-
-**Warning**: this fork deviates from the mainstream. Savegames are interchangeable, but rules and abilities for the Tourists are **different**.
+Fork by Lisias.
 
 
 ## In a Hurry
 
-* [Latest Release](https://github.com/net-lisias-kspu/KourageusTourists/releases)
-	+ [Binaries](https://github.com/net-lisias-kspu/KourageusTourists/tree/Archive)
-* [Source](https://github.com/net-lisias-kspu/KourageusTourists)
+* [Latest Release](https://github.com/net-lisias-ksp/KourageousTourists/releases)
+	+ [Binaries](https://github.com/net-lisias-ksp/KourageousTourists/tree/Archive)
+* [Source](https://github.com/net-lisias-ksp/KourageousTourists)
 * Documentation
-	+ [Project's README](https://github.com/net-lisias-kspu/KourageusTourists/blob/master/README.md)
-	+ [Install Instructions](https://github.com/net-lisias-kspu/KourageusTourists/blob/master/INSTALL.md)
-	+ [Known Issues](https://github.com/net-lisias-kspu/KourageusTourists/blob/master/KNOWN_ISSUES.md)
+	+ [Project's README](https://github.com/net-lisias-ksp/KourageousTourists/blob/master/README.md)
+	+ [Install Instructions](https://github.com/net-lisias-ksp/KourageousTourists/blob/master/INSTALL.md)
+	+ [Known Issues](https://github.com/net-lisias-ksp/KourageousTourists/blob/master/KNOWN_ISSUES.md)
 	+ [Change Log](./CHANGE_LOG.md)
 	+ [TODO](./TODO.md) list
 
@@ -38,7 +36,7 @@ This mod temporarily promotes tourists to crew members in order to allow them go
 
 Level 5 tourists, if they survived to this, can do basically everything. Tourists gain experience just like regular crew, so for training them to level one, just take them to orbital spaceflight around Kerbin and recover. Level 2 could be obtained by Mün/Minmus landings and this is enough for every possible contract destination. You can also train them onsite using facilities that provide Level up crew function, albeit it does not seem safe enough.
 
-This fork also **deviates from the upstream** as follows:
+This fork **deviates from the previous maintainer** as follows:
 
 * Level 5 tourists can sky dive even without a contract.
 * Level 1 tourists cannot EVA outside Kerbin, but can be assigned into External Command Seats (and similar parts) for guided tours on celestial bodies.
@@ -58,9 +56,9 @@ This mod also adds three new types of contracts that depend on tourists ability 
 
 ### Compatible with
 
-* [EVA Fuel](https://github.com/net-lisias-kspu/EvaFuel)
-* [EVA Enhancements](https://github.com/net-lisias-kspu/EvaEnhancements)
-* [EVA Follower](https://github.com/net-lisias-kspu/EvaFollower)
+* EVA Fuel
+* EVA Enhancements
+* EVA Follower
 
 
 ## Installation
@@ -101,7 +99,7 @@ Please note the copyrights and trademarks in [NOTICE](./NOTICE).
 
 ## UPSTREAM
 
-* [whale_2](https://forum.kerbalspaceprogram.com/index.php?/profile/167015-whale_2/) CURRENT MAINTAINER
+* [whale_2](https://forum.kerbalspaceprogram.com/index.php?/profile/167015-whale_2/) PREVIOUS MAINTAINER
 	+ [Forum](https://forum.kerbalspaceprogram.com/index.php?/topic/167120-*)
 	+ [CurseForge](https://www.curseforge.com/kerbal/ksp-mods/kourageous-tourists)
 	+ [SpaceDock](https://spacedock.info/mod/1613/Kourageous%20Tourists)

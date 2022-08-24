@@ -1,4 +1,4 @@
-# Kourageous Tourists /L Unleashed :: Changes
+# Kourageous Tourists /L :: Changes
 
 * 2022-0627: 0.5.3.1 (Lisias) for KSP >= 1.3
 	+ Finally implementing full support for Real Chutes.

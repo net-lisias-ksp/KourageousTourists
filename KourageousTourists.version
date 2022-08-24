@@ -1,9 +1,9 @@
 {
-	"NAME"		: "Kouragerous Tourists /L Unleashed",
-	"URL"		: "https://raw.githubusercontent.com/net-lisias-kspu/KouragerousTourists/master/KourageousTourists.version",
-	"DOWNLOAD"	: "https://github.com/net-lisias-kspu/KouragerousTourists/releases",
-	"CHANGE_LOG"	: "https://raw.githubusercontent.com/net-lisias-kspu/KouragerousTourists/CHANGE_LOG.md",
-	"CHANGE_LOG_URL": "https://raw.githubusercontent.com/net-lisias-kspu/KouragerousTourists/CHANGES.md",
+	"NAME"		: "Kouragerous Tourists /L",
+	"URL"		: "https://raw.githubusercontent.com/net-lisias-ksp/KourageousTourists/master/KourageousTourists.version",
+	"DOWNLOAD"	: "https://github.com/net-lisias-ksp/KourageousTourists/releases",
+	"CHANGE_LOG"	: "https://raw.githubusercontent.com/net-lisias-ksp/KourageousTourists/master/CHANGE_LOG.md",
+	"CHANGE_LOG_URL": "https://raw.githubusercontent.com/net-lisias-ksp/KourageousTourists/master/CHANGES.md",
 	"VERSION":{
 		"MAJOR":0,
 		"MINOR":5,

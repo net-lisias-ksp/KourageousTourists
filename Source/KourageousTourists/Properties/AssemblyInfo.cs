@@ -4,7 +4,7 @@ using System.Runtime.CompilerServices;
 // Information about this assembly is defined by the following attributes.
 // Change them to the values specific to your project.
 
-[assembly: AssemblyTitle ("KourageousTourists /L Unleashed")]
+[assembly: AssemblyTitle ("KourageousTourists /L")]
 [assembly: AssemblyDescription ("")]
 [assembly: AssemblyConfiguration ("")]
 [assembly: AssemblyCompany (KourageousTourists.LegalMamboJambo.Company)]
