@@ -186,17 +186,19 @@ namespace KourageousTourists
 			GameEvents.onCrewOnEva.Remove(OnEvaStart);
 			GameEvents.onCrewBoardVessel.Remove(OnCrewBoardVessel);
 			GameEvents.onVesselWillDestroy.Remove(OnVesselWillDestroy);
-			GameEvents.onVesselLoaded.Add(OnVesselLoad);
+			GameEvents.onVesselLoaded.Remove(OnVesselLoad);
 			GameEvents.onVesselChange.Remove(OnVesselChange);
 			GameEvents.onVesselCreate.Remove(OnVesselCreate);
 			GameEvents.onNewVesselCreated.Remove(OnNewVesselCreated);
 
 			GameEvents.onAttemptEva.Remove(OnAttemptEVA);
 			GameEvents.onFlightReady.Remove(OnFlightReady);
-			GameEvents.onVesselGoOffRails.Remove (OnVesselGoOffRails);
+			GameEvents.onVesselGoOffRails.Remove(OnVesselGoOffRails);
+
+			GameEvents.OnVesselRecoveryRequested.Remove(OnVesselRecoveryRequested);
 
 			tourists = null;
-			factory = null; // do we really need this?
+			this.factory = null;
 			smile = false;
 			taken = false;
 			fx = null;
