@@ -21,9 +21,7 @@
 	If not, see <https://www.gnu.org/licenses/>.
 
 */
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 
 using Log = KourageousTourists.Log;
 
