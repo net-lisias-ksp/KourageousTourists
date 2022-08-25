@@ -70,11 +70,8 @@ namespace KourageousTourists
 		public Tourist createForLevel(int level, ProtoCrewMember crew) {
 			Tourist t = new Tourist ();
 
-			ProtoTourist pt;
-			if (!touristConfig.TryGetValue (level, out pt)) {
-				Log.warn("Can't find config for level " + level);
-				return t;
-			}
+			ProtoTourist pt = this.createForLevel(level);
+			if (null == pt) return t;
 
 			t.level = pt.level;
 			t.abilities = pt.abilities;
@@ -85,6 +82,15 @@ namespace KourageousTourists
 			t.rnd = new System.Random ();
 			t.isSkydiver = isSkyDiver (crew);
 			return t;
+		}
+
+		public ProtoTourist createForLevel(int level) {
+			ProtoTourist r;
+			if (!touristConfig.TryGetValue (level, out r)) {
+				Log.warn("Can't find config for level " + level);
+				return null;
+			}
+			return r;
 		}
 
 		public static bool isSkyDiver(ProtoCrewMember crew) {

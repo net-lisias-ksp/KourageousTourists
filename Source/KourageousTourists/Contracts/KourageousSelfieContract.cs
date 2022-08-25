@@ -136,7 +136,7 @@ namespace KourageousTourists.Contracts
 				"{0} want to impress friends and relatives by showing them their photos, taken on the surface of {1}. Ferry them " +
 				"there, let them out, take photos and return safely. Note that it could be a single photo of all the party " +
 				" or several photos, but every single tourist must be pictured at least once. {2}" , getProperTouristWord(),
-				targetBody.bodyName, trainingHint(targetBody.bodyName));
+				targetBody.bodyName, trainingHint(targetBody.bodyName, "LANDED", "EVA", true));
 		}
 
 		protected override string GetSynopsys() {

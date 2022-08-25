@@ -127,7 +127,7 @@ namespace KourageousTourists.Contracts
 			return String.Format (
 				"{0} want to practice their moon-walk by performing a real {1}-walk. Ferry them " +
 				"there, let them out and return safely. {2}", getProperTouristWord(), targetBody.bodyName,
-				trainingHint(targetBody.bodyName));
+				trainingHint(targetBody.bodyName, "LANDED", "EVA"));
 		}
 
 		protected override string GetSynopsys() {

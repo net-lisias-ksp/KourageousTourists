@@ -79,7 +79,7 @@ namespace KourageousTourists.Contracts
 				return;
 
 
-			String distanceNode = config.GetValue (anomalyDistance);
+			String distanceNode = config.GetValue ("anomalyDistance");
 			if (distanceNode != null) {
 				try {
 					anomalyDiscoveryDistance = (float)Convert.ToDouble(distanceNode);
@@ -275,7 +275,7 @@ namespace KourageousTourists.Contracts
 		protected override string GetDescription() {
 			return KourageousContract.tokenize (
 				chosenAnomaly.contractDescription, getProperTouristWord(), anomalyDiscoveryDistance,
-				trainingHint(chosenAnomaly.body.bodyName));
+				trainingHint(chosenAnomaly.body.bodyName, "LANDED", "EVA", true));
 		}
 
 		protected override string GetSynopsys() {

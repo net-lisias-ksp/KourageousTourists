@@ -29,12 +29,12 @@ namespace KourageousTourists
 {
 	public class ProtoTourist
 	{
-		public int level { get; set; }
-		public List<String> abilities { get; set; }
-		public List<String> situations { get; set; }
-		public List<String> celestialBodies { get; set; }
-		public double srfspeed { get; set; }
-		public bool isSkydiver { get; set; }
+		public int level { get; internal set; }
+		public List<String> abilities { get; internal set; }
+		public List<String> situations { get; internal set; }
+		public List<String> celestialBodies { get; internal set; }
+		public double srfspeed { get; internal set; }
+		public bool isSkydiver { get; internal set; }
 
 		public ProtoTourist ()
 		{

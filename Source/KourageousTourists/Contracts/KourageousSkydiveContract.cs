@@ -132,10 +132,11 @@ namespace KourageousTourists.Contracts
 				"{0} just want to experience skydiving anywhere on {1}. Please note, that " +
 				"for safety reasons air speed for jumping out should not exceed {2} m/s, " +
 				"and altitude must be at least {3} m above the ground level. " +
-				"The skydiver should land on a solid ground.",
+				"The skydiver should land on a solid ground. {4}",
 				getProperTouristWord (), targetBody.bodyName, 
 				Settings.Instance.paraglidingMaxAirspeed,
-				Settings.Instance.paraglidingMinAltAGL
+				Settings.Instance.paraglidingMinAltAGL,
+				trainingHint(targetBody.bodyName, null, "EVA")
 			);
 		}
 

@@ -161,34 +161,46 @@ namespace KourageousTourists
 		}
 
 		protected static string tokenize(params Object[] args) {
-			string result = "";
-			int token = 0;
-			foreach (Object p in args) {
-				if (result.Length == 0) {
-					result = p.ToString();
-					continue;
-				}
-				result = result.Replace ("Token" + token, p.ToString());
-				token++;
-			}
+			string result = args[0].ToString();
+			for(int i = 1; i < args.Length; ++i)
+				result = result.Replace("Token" + (i-1), args[i].ToString());
 			return result;
 		}
 
-		protected static string trainingHint(string body) {
+		protected static string trainingHint(string body, string situation, string ability, bool commandSeat = false) {
 
 			string hint = "Please note, tourists should be trained at least to level {0} to be able to disembark the" +
-			              " vessel landed on {1}. Training usually could be performed by {2}";
-			string[] trainings = {
-				"the orbital flight and successful recovery.",
-				"visiting Mun or Minmus and following safe recovery."
-			};
-			int requiredLevel = 0;
-			if (body.Equals ("Mun") || body.Equals ("Minmus"))
-				requiredLevel = 1;
-			else
-				requiredLevel = 2;
+							" vessel on {1}. Training usually could be performed by {2}";
 
-			return String.Format (hint, requiredLevel, body, trainings [requiredLevel - 1]);
+			int requiredLevel;
+			for (requiredLevel = 0; requiredLevel < 6; ++requiredLevel)
+			{
+				ProtoTourist pt = TouristFactory.Instance.createForLevel(requiredLevel);
+				if (null == pt) continue;
+				bool r = true;
+				r &= 0 == pt.celestialBodies.Count || pt.celestialBodies.Contains(body);
+				r &= (null == situation || pt.situations.Contains(situation));
+				r &= pt.abilities.Contains(ability);
+				if(r) break;
+			}
+
+			string training;
+			switch(requiredLevel)
+			{
+				case 0:
+					training = "All tourists are eligible.";
+					break;
+
+				case 1:
+					training = "the orbital flight and successful recovery.";
+					break;
+
+				default:
+					training = "visiting Mun or Minmus and following safe recovery.";
+					break;
+			}
+
+			return String.Format(hint, requiredLevel, body, training + (0 != requiredLevel && commandSeat?" Or they can be sent on Command Seats!":""));
 		}
 	}
 }
