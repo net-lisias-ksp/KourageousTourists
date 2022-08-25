@@ -2,8 +2,8 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 source ${SCRIPT_DIR}/../CONFIG.inc
 
 PACKAGE="KourageousTourists"
-TARGETDIR="net.lisias.ksp/$PACKAGE/"
-TARGETBINDIR="$TARGETDIR/Plugins"
+TARGETDIR="$PACKAGE/"
+TARGETBINDIR="$TARGETDIR/Plugins/"
 PROJECTSDIR="Source/$PACKAGE/"
 VERSIONFILE="$PACKAGE.version"
 
