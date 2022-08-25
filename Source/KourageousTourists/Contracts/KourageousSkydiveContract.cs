@@ -98,7 +98,7 @@ namespace KourageousTourists.Contracts
 		}
 
 		protected override void OnAccepted() {
-			Log.detail("entered: body= {0]", targetBody.bodyName);
+			Log.detail("entered: body= {0}", targetBody.bodyName);
 			foreach (ProtoCrewMember tourist in tourists) {
 				HighLogic.CurrentGame.CrewRoster.AddCrewMember (tourist);
 				Log.detail("adding to roster: {0}", tourist.name);

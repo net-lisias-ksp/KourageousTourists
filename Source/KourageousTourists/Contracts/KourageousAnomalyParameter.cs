@@ -54,7 +54,7 @@ namespace KourageousTourists.Contracts
 										);
 
 			if (config != null) {
-				this.minAnomalyDistance = config.GetValue<float>("'anomalyDiscoveryDistance", this.minAnomalyDistance);
+				this.minAnomalyDistance = config.GetValue<float>("anomalyDiscoveryDistance", this.minAnomalyDistance);
 			}
 			else
 				Log.warn("no config found in game database");

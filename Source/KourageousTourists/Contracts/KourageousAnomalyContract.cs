@@ -54,7 +54,6 @@ namespace KourageousTourists.Contracts
 	public class KourageousAnomalyContract : KourageousContract
 	{
 		public const string cfgNode = "ANOMALY";
-		public const string anomalyDistance = "anomalyDiscoveryDistance";
 
 		private static KourageousAnomalyContract instance = null;
 		internal static KourageousAnomalyContract Instance = instance ?? (instance = new KourageousAnomalyContract());
