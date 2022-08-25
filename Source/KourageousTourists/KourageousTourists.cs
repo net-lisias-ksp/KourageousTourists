@@ -36,8 +36,6 @@ namespace KourageousTourists
 	public class KourageousTouristsAddOn : MonoBehaviour
 	{
 
-		public const String debugLog = "debuglog";
-
 		private readonly String audioPath = KSPe.GameDB.Asset<KourageousTouristsAddOn>.Solve("Sounds", "shutter");
 
 		// We keep every kerbal in scene in here just to make every one of them smile

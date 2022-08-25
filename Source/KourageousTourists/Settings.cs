@@ -26,6 +26,7 @@ using System;
 
 using KSPe;
 
+using Globals = KSPe.Globals<KourageousTourists.Startup>;
 using Asset = KSPe.IO.Asset<KourageousTourists.Startup>;
 using Data = KSPe.IO.Save<KourageousTourists.Startup>;
 
@@ -38,7 +39,6 @@ namespace KourageousTourists
 		private static Settings instance = null;
 		internal static Settings Instance = instance ?? (instance = new Settings());
 
-		internal bool debug = true;
 		internal bool noSkyDiving = false;
 		internal bool forceTouristsInSandbox = true;
 		internal float paraglidingChutePitch = 1.1f;
@@ -82,10 +82,9 @@ namespace KourageousTourists
 				return;
 			}
 
-			this.debug = config.GetValue<bool>("debug", this.debug);
 			this.noSkyDiving = config.GetValue("noSkyDiving", this.noSkyDiving);
 			this.forceTouristsInSandbox = config.GetValue("forceTouristsInSandbox", this.forceTouristsInSandbox);
-			Log.detail("debug: {0}; noSkydiving: {1}; forceInSB: {2}", this.debug, this.noSkyDiving, this.forceTouristsInSandbox);
+			Log.detail("debug: {0}; noSkydiving: {1}; forceInSB: {2}", Globals.DebugMode, this.noSkyDiving, this.forceTouristsInSandbox);
 
 			this.paraglidingChutePitch = config.GetValue<float>("paraglidingChutePitch", this.paraglidingChutePitch);
 			this.paraglidingDeployDelay = config.GetValue<float>("paraglidingDeployDelay", this.paraglidingDeployDelay);
