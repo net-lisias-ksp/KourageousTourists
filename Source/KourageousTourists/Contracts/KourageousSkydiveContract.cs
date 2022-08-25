@@ -134,8 +134,9 @@ namespace KourageousTourists.Contracts
 				"and altitude must be at least {3} m above the ground level. " +
 				"The skydiver should land on a solid ground.",
 				getProperTouristWord (), targetBody.bodyName, 
-				KourageousTouristsAddOn.paraglidingMaxAirspeed,
-				KourageousTouristsAddOn.paraglidingMinAltAGL);
+				Settings.Instance.paraglidingMaxAirspeed,
+				Settings.Instance.paraglidingMinAltAGL
+			);
 		}
 
 		protected override string GetSynopsys() {
@@ -155,7 +156,7 @@ namespace KourageousTourists.Contracts
 
 		public override bool MeetRequirements ()
 		{
-			if (KourageousTouristsAddOn.noSkyDiving)
+			if (Settings.Instance.noSkyDiving)
 			{
 				return false;
 			}

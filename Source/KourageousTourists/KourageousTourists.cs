@@ -24,7 +24,6 @@
 */
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Collections;
 
 using UnityEngine;
@@ -37,13 +36,10 @@ namespace KourageousTourists
 	public class KourageousTouristsAddOn : MonoBehaviour
 	{
 
-		public const String cfgRoot = "KOURAGECONFIG";
-		public const String cfgLevel = "LEVEL";
 		public const String debugLog = "debuglog";
 
 		private readonly String audioPath = KSPe.GameDB.Asset<KourageousTouristsAddOn>.Solve("Sounds", "shutter");
 
-		private TouristFactory factory = null;
 		// We keep every kerbal in scene in here just to make every one of them smile
 		// on photo; some, however, clearly are not tourists
 		public Dictionary<String, Tourist> tourists = null;
@@ -61,13 +57,6 @@ namespace KourageousTourists
 		public double RCSamount;
 		public double RCSMax;
 
-		internal static bool debug = true;
-		public static bool noSkyDiving = false;
-		internal static float paraglidingChutePitch = 1.1f;
-		internal static float paraglidingDeployDelay = 5f;
-		public static float paraglidingMaxAirspeed = 100f;
-		public static float paraglidingMinAltAGL = 1500f;
-
 		bool highGee = false;
 
 		public static EventVoid selfieListeners = new EventVoid("Selfie");
@@ -80,47 +69,14 @@ namespace KourageousTourists
 		{
 			Log.dbg("entered KourageousTourists Awake scene:{0}", HighLogic.LoadedScene);
 
-			bool forceTouristsInSandbox = false;
+			Settings.Instance.Read();
 
-			ConfigNode config = Settings.Instance.Read();
-
-			if (config == null)
-			{
-				Log.warn("No config nodes!");
-				return;
-			}
-			String debugState = config.GetValue("debug");
-			String noDiving = config.GetValue("noSkyDiving");
-			String forceInSandbox = config.GetValue("forceTouristsInSandbox");
-
-			try
-			{
-				paraglidingChutePitch = float.Parse(config.GetValue("paraglidingChutePitch"));
-				paraglidingDeployDelay = float.Parse(config.GetValue("paraglidingDeployDelay"));
-				paraglidingMaxAirspeed = float.Parse(config.GetValue("paraglidingMaxAirpseed"));
-				paraglidingMinAltAGL = float.Parse(config.GetValue("paraglidingMinAltAGL"));
-				Log.detail("paragliding params: pitch: {0}, delay: {1}, speed: {2}, alt: {3}", paraglidingChutePitch, paraglidingDeployDelay, paraglidingMaxAirspeed, paraglidingMinAltAGL);
-			}
-			catch (Exception) {
-				Log.detail("Failed parsing paragliding tweaks!");
-			}
-
-			Log.detail("debug: {0}; nodiving: {1}; forceInSB: {2}", debugState, noDiving, forceInSandbox);
-
-			debug = debugState != null &&
-			        (debugState.ToLower().Equals ("true") || debugState.Equals ("1"));
-			noSkyDiving = noDiving != null &&
-			        (noDiving.ToLower().Equals ("true") || noDiving.Equals ("1"));
-			forceTouristsInSandbox = forceInSandbox != null &&
-			              (forceInSandbox.ToLower().Equals ("true") || forceInSandbox.Equals ("1"));
-
-			Log.detail("debug: {0}; nodiving: {1}; forceInSB: {2}", debug, noSkyDiving, forceTouristsInSandbox);
 			Log.detail("highlogic: {0}", HighLogic.fetch);
 			Log.detail("game: {0}", HighLogic.CurrentGame);
 
 			// Ignore non-career game mode
-			if (HighLogic.CurrentGame == null ||
-			    (!forceTouristsInSandbox && HighLogic.CurrentGame.Mode != Game.Modes.CAREER))
+			if (HighLogic.CurrentGame == null
+				|| (!Settings.Instance.forceTouristsInSandbox && HighLogic.CurrentGame.Mode != Game.Modes.CAREER))
 			{
 				return;
 			}
@@ -131,8 +87,6 @@ namespace KourageousTourists
 			if (!HighLogic.LoadedSceneIsFlight)
 				return;
 
-			if (factory == null)
-				factory = new TouristFactory ();
 			if (tourists == null)
 				tourists = new Dictionary<String, Tourist> ();
 
@@ -198,7 +152,6 @@ namespace KourageousTourists
 			GameEvents.OnVesselRecoveryRequested.Remove(OnVesselRecoveryRequested);
 
 			tourists = null;
-			this.factory = null;
 			smile = false;
 			taken = false;
 			fx = null;
@@ -261,7 +214,7 @@ namespace KourageousTourists
 			Log.detail("Priming chute");
 
 			if (ChuteSupport.INSTANCE.hasChute(v))
-				yield return ChuteSupport.INSTANCE.deployChute(v, paraglidingDeployDelay, paraglidingChutePitch);
+				yield return ChuteSupport.INSTANCE.deployChute(v, Settings.Instance.paraglidingDeployDelay, Settings.Instance.paraglidingChutePitch);
 			else
 			{
 				ScreenMessages.PostScreenMessage ("<color=orange>I think I'm missing something...</color>");
@@ -343,7 +296,7 @@ namespace KourageousTourists
 				return;
 			Log.dbg("Leveling up {0}", kerbal.name);
 			// Re-create tourist
-			tourists[kerbal.name] = factory.createForLevel (kerbal.experienceLevel, kerbal);
+			tourists[kerbal.name] = TouristFactory.Instance.createForLevel (kerbal.experienceLevel, kerbal);
 		}
 
 		private void checkApproachingGeeLimit() {
@@ -397,7 +350,7 @@ namespace KourageousTourists
 					continue;
 
 				Log.dbg("Creating tourist from cfg; lvl: {0}, crew: {1}", crew.experienceLevel, crew);
-				Tourist t = factory.createForLevel (crew.experienceLevel, crew);
+				Tourist t = TouristFactory.Instance.createForLevel (crew.experienceLevel, crew);
 				this.tourists.Add (crew.name, t);
 				Log.dbg("Added: {0} ({1})", crew.name, this.tourists);
 			}
@@ -719,7 +672,7 @@ namespace KourageousTourists
 #if DEBUG
 			if (obj == null)
 				return "null";
-			StringBuilder sb = new StringBuilder();
+			System.Text.StringBuilder sb = new System.Text.StringBuilder();
 			try {
 				Type t = typeof(T);
 				System.Reflection.PropertyInfo[] props = t.GetProperties();

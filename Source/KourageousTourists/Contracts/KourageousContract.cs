@@ -32,6 +32,7 @@ namespace KourageousTourists
 {
 	public class KourageousContract : Contract
 	{
+		public const String cfgRoot = "KOURAGE";
 
 		protected CelestialBody targetBody = null;
 		protected int numTourists;

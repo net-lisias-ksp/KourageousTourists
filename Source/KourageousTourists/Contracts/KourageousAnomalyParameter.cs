@@ -25,19 +25,17 @@
 using System;
 using System.Linq;
 
+using KSPe;
+
 using UnityEngine;
 
 namespace KourageousTourists.Contracts
 {
 	public class KourageousAnomalyParameter: KourageousParameter 
 	{
-		public const string discoveryDistance = "anomalyDiscoveryDistance";
-		public const float defaultMinAnomalyDistance = 50;
-
 		protected string anomalyName;
 		protected string anomalyDisplayName;
-		protected float minAnomalyDistance;
-
+		protected float minAnomalyDistance = 50;
 
 		public KourageousAnomalyParameter() : base() {}
 
@@ -51,18 +49,12 @@ namespace KourageousTourists.Contracts
 		}
 
 		protected void setDistance() {
-			ConfigNode config = GameDatabase.Instance.GetConfigNodes(KourageousTouristsAddOn.cfgRoot).FirstOrDefault();
-			this.minAnomalyDistance = defaultMinAnomalyDistance;
-			if (config != null) {
+			ConfigNodeWithSteroids config = ConfigNodeWithSteroids.from(
+											GameDatabase.Instance.GetConfigNodes(KourageousContract.cfgRoot).FirstOrDefault()
+										);
 
-				String dscvr = config.GetValue (discoveryDistance);
-				if (dscvr != null) {
-					try {
-						this.minAnomalyDistance = (float)Convert.ToDouble (dscvr);
-					} catch (Exception e) {
-						Log.error(e, this);
-					}
-				}
+			if (config != null) {
+				this.minAnomalyDistance = config.GetValue<float>("'anomalyDiscoveryDistance", this.minAnomalyDistance);
 			}
 			else
 				Log.warn("no config found in game database");
@@ -144,9 +136,8 @@ namespace KourageousTourists.Contracts
 		{
 			base.OnLoad (node);
 			this.anomalyName = String.Copy(node.GetValue ("anomalyName"));
-			KourageousAnomalyContract.readAnomalyConfig ();
-			this.anomalyDisplayName = 
-				KourageousAnomalyContract.anomalies [targetBody.name + ":" + anomalyName].anomalyDescription;
+			KourageousAnomalyContract.Reload();
+			this.anomalyDisplayName =  KourageousAnomalyContract.Instance.anomalies [targetBody.name + ":" + anomalyName].anomalyDescription;
 			Log.dbg("display name: {0}", anomalyDisplayName);
 			setDistance ();
 		}

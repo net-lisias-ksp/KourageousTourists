@@ -53,21 +53,29 @@ namespace KourageousTourists.Contracts
 
 	public class KourageousAnomalyContract : KourageousContract
 	{
-		public const string anomalyCfgNode = "ANOMALY";
+		public const string cfgNode = "ANOMALY";
 		public const string anomalyDistance = "anomalyDiscoveryDistance";
-		internal static Dictionary<String, KourageousAnomaly> anomalies = null;
+
+		private static KourageousAnomalyContract instance = null;
+		internal static KourageousAnomalyContract Instance = instance ?? (instance = new KourageousAnomalyContract());
+
+		internal readonly Dictionary<String, KourageousAnomaly> anomalies = new Dictionary<String, KourageousAnomaly>();
 		protected KourageousAnomaly chosenAnomaly;
 		protected static float anomalyDiscoveryDistance = 50.0f;
 
-		public KourageousAnomalyContract () : base () {}
+		public KourageousAnomalyContract () : base ()
+		{
+			this.readAnomalyConfig();
+		}
 
-		internal static void readAnomalyConfig() {
+		public static void Reload()
+		{
+			instance = null;
+		}
 
-			if (anomalies != null)
-				return;
-
-			anomalies = new Dictionary<String, KourageousAnomaly> ();
-			ConfigNode config = GameDatabase.Instance.GetConfigNodes(KourageousTouristsAddOn.cfgRoot).FirstOrDefault();
+		private void readAnomalyConfig()
+		{
+			ConfigNode config = GameDatabase.Instance.GetConfigNodes(KourageousContract.cfgRoot).FirstOrDefault();
 			if (config == null)
 				return;
 
@@ -82,7 +90,7 @@ namespace KourageousTourists.Contracts
 				}
 			}
 
-			ConfigNode[] nodes = config.GetNodes (anomalyCfgNode);
+			ConfigNode[] nodes = config.GetNodes (cfgNode);
 			foreach (ConfigNode node in nodes) {
 
 				KourageousAnomaly anomaly = new KourageousAnomaly ();

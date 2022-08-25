@@ -165,8 +165,8 @@ namespace KourageousTourists
 			if (!hasAbility("SkyDive")) {
 			 	return new EVAAttempt ("This tourist is not trained for skydiving!", false);
 			}
-			bool srfSpeedOk = Math.Abs (v.srfSpeed) < KourageousTouristsAddOn.paraglidingMaxAirspeed;
-			bool altOk = v.radarAltitude > KourageousTouristsAddOn.paraglidingMinAltAGL;
+			bool srfSpeedOk = Math.Abs (v.srfSpeed) < Settings.Instance.paraglidingMaxAirspeed;
+			bool altOk = v.radarAltitude > Settings.Instance.paraglidingMinAltAGL;
 
 			String skyDiveMessage = "";
 			if (!srfSpeedOk) {

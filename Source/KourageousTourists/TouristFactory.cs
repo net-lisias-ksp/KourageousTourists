@@ -24,6 +24,11 @@
 */
 using System;
 using System.Collections.Generic;
+using System.Linq;
+
+using Asset = KSPe.IO.Asset<KourageousTourists.Startup>;
+using Data = KSPe.IO.Save<KourageousTourists.Startup>;
+using File = KSPe.IO.File<KourageousTourists.Startup>;
 
 using Contracts;
 using KourageousTourists.Contracts;
@@ -33,23 +38,37 @@ namespace KourageousTourists
 {
 	public class TouristFactory
 	{
+		public const String cfgRoot = "KOURAGE";
+		public const String cfgNode = "LEVEL";
 
-		public Dictionary<int,ProtoTourist> touristConfig;
-		public bool initialized = false;
+		private static TouristFactory instance = null;
+		internal static TouristFactory Instance = instance ?? (instance = new TouristFactory());
 
-		public TouristFactory ()
+		public readonly Dictionary<int,ProtoTourist> touristConfig = new Dictionary<int, ProtoTourist>();
+
+		private TouristFactory ()
 		{
-			touristConfig = new Dictionary<int, ProtoTourist> ();
-			initialized = readConfig ();
+			GameEvents.onGameStatePostLoad.Add(this.onGameStateCreated);
+			this.touristConfig = new Dictionary<int, ProtoTourist> ();
+			this.readConfig();
+		}
+
+		~TouristFactory()
+		{
+			GameEvents.onGameStatePostLoad.Remove(this.onGameStateCreated);
+		}
+
+		private void onGameStateCreated(ConfigNode data)
+		{
+			Log.dbg("TouristFactory.onGameStateCreated {0}", data.GetValue("Tittle"));
+			// A new savegame was loaded.
+			// The current instance is not valid anymore!
+			// Kill ourselves, and let the new generation take over!
+			instance = null;
 		}
 
 		public Tourist createForLevel(int level, ProtoCrewMember crew) {
-
 			Tourist t = new Tourist ();
-			if (!initialized) {
-				Log.warn("TouristFactory not initialized, can't make tourists!");
-				return t;
-			}
 
 			ProtoTourist pt;
 			if (!touristConfig.TryGetValue (level, out pt)) {
@@ -88,17 +107,49 @@ namespace KourageousTourists
 			return false;
 		}
 
-		private bool readConfig()
+		private void readConfig()
 		{
 			Log.dbg("reading config");
-			ConfigNode config = Settings.Instance.Read();
+			{
+				ConfigNode config = GameDatabase.Instance.GetConfigNodes(TouristFactory.cfgRoot).FirstOrDefault();
+				this.readConfig(config);
+			}
+			{
+				ConfigNode config = HighLogic.LoadedSceneIsGame ? this.ReadConfigFromSaveGame() : ReadConfigFromDefaults();
+				this.readConfig(config);
+			}
+		}
 
+		private ConfigNode ReadConfigFromSaveGame()
+		{
+			Data.ConfigNode config = Data.ConfigNode.For(Settings.cfgRoot, "KourageLevels.cfg");
+			if (!config.IsLoadable)
+			{
+				config.Clear();
+				File.Asset.CopyToSave("KourageLevels.cfg", "KourageLevels.cfg", true);
+			}
+			return config.Load().Node;
+		}
+
+		private ConfigNode ReadConfigFromDefaults()
+		{
+			Asset.ConfigNode defaults = Asset.ConfigNode.For(Settings.cfgRoot, "KourageLevels.cfg");
+			if (!defaults.IsLoadable)
+			{
+				Log.error("Where is the default KourageLevels.cfg? Kourageous Tourists will not work properly without it!");
+				return null;
+			}
+			return defaults.Load().Node;
+		}
+
+		private bool readConfig(ConfigNode config)
+		{
 			if (config == null) {
 				Log.dbg("no config found in game database");
 				return false;
 			}
 
-			ConfigNode[] nodes = config.GetNodes (KourageousTouristsAddOn.cfgLevel);
+			ConfigNode[] nodes = config.GetNodes (TouristFactory.cfgNode);
 			foreach (ConfigNode cfg in nodes) {
 
 				String tLvl = cfg.GetValue("touristlevel");
@@ -139,6 +190,7 @@ namespace KourageousTourists
 				}
 
 				Log.dbg("Adding cfg: {0}", t);
+				if (this.touristConfig.ContainsKey(lvl)) this.touristConfig.Remove(lvl);
 				this.touristConfig.Add (lvl, t);
 			}
 			return true;

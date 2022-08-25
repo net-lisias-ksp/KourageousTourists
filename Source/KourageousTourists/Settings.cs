@@ -24,6 +24,8 @@
 */
 using System;
 
+using KSPe;
+
 using Asset = KSPe.IO.Asset<KourageousTourists.Startup>;
 using Data = KSPe.IO.Save<KourageousTourists.Startup>;
 
@@ -31,10 +33,19 @@ namespace KourageousTourists
 {
 	internal class Settings
 	{
+		public const String cfgRoot = "KOURAGE";
+
 		private static Settings instance = null;
 		internal static Settings Instance = instance ?? (instance = new Settings());
 
-		private Data.ConfigNode settings;
+		internal bool debug = true;
+		internal bool noSkyDiving = false;
+		internal bool forceTouristsInSandbox = true;
+		internal float paraglidingChutePitch = 1.1f;
+		internal float paraglidingDeployDelay = 5f;
+		internal float paraglidingMaxAirspeed = 100f;
+		internal float paraglidingMinAltAGL = 1500f;
+
 		private Settings()
 		{
 			GameEvents.onGameStatePostLoad.Add(this.onGameStateCreated);
@@ -47,35 +58,69 @@ namespace KourageousTourists
 
 		private void onGameStateCreated(ConfigNode data)
 		{
-			Log.dbg("onGameStateCreated {0}", data.GetValue("Tittle"));
+			Log.dbg("Settings.onGameStateCreated {0}", data.GetValue("Tittle"));
+			this.VerifySaveGameData();
 			// A new savegame was loaded.
 			// The current instance is not valid anymore!
 			// Kill ourselves, and let the new generation take over!
 			instance = null;
 		}
 
-		internal ConfigNode Read() => HighLogic.LoadedSceneIsGame ? this.ReadFromSaveGame() : ReadFromDefaults();
-
-		private ConfigNode ReadFromSaveGame()
+		internal void Read()
 		{
-			this.settings = this.settings??Data.ConfigNode.For(KourageousTouristsAddOn.cfgRoot, "Kourage.cfg");
-			if (!this.settings.IsLoadable)
-			{
-				this.settings.Clear();
-				this.settings.Save(this.ReadFromDefaults());
-			}
-			return this.settings.Load().Node;
+			this.ReadConfig();
 		}
 
-		private ConfigNode ReadFromDefaults()
+		// *** Main Configuration file Kourageous.cfg
+
+		private void ReadConfig()
 		{
-			Asset.ConfigNode defaults = Asset.ConfigNode.For(KourageousTouristsAddOn.cfgRoot, "Kourage.cfg");
+			ConfigNodeWithSteroids config = HighLogic.LoadedSceneIsGame ? this.ReadConfigFromSaveGame() : ReadConfigFromDefaults();
+			if (config == null)
+			{
+				Log.warn("No config nodes!");
+				return;
+			}
+
+			this.debug = config.GetValue<bool>("debug", this.debug);
+			this.noSkyDiving = config.GetValue("noSkyDiving", this.noSkyDiving);
+			this.forceTouristsInSandbox = config.GetValue("forceTouristsInSandbox", this.forceTouristsInSandbox);
+			Log.detail("debug: {0}; noSkydiving: {1}; forceInSB: {2}", this.debug, this.noSkyDiving, this.forceTouristsInSandbox);
+
+			this.paraglidingChutePitch = config.GetValue<float>("paraglidingChutePitch", this.paraglidingChutePitch);
+			this.paraglidingDeployDelay = config.GetValue<float>("paraglidingDeployDelay", this.paraglidingDeployDelay);
+			this.paraglidingMaxAirspeed = config.GetValue<float>("paraglidingMaxAirpseed", this.paraglidingMaxAirspeed);
+			this.paraglidingMinAltAGL = config.GetValue<float>("paraglidingMinAltAGL", this.paraglidingMinAltAGL);
+			Log.detail("paragliding params: pitch: {0}, delay: {1}, speed: {2}, alt: {3}", this.paraglidingChutePitch, this.paraglidingDeployDelay, this.paraglidingMaxAirspeed, this.paraglidingMinAltAGL);
+		}
+
+		private ConfigNodeWithSteroids ReadConfigFromSaveGame()
+		{
+			// Interesting fact: this code is run **before** the KSP's savegame folders are created when you create a new game!
+			Data.ConfigNode settings = Data.ConfigNode.For(Settings.cfgRoot, "Kourage.cfg");
+			if (!settings.IsLoadable) return this.ReadConfigFromDefaults();
+			return ConfigNodeWithSteroids.from(settings.Load().Node);
+		}
+
+		private ConfigNodeWithSteroids ReadConfigFromDefaults()
+		{
+			Asset.ConfigNode defaults = Asset.ConfigNode.For(Settings.cfgRoot, "Kourage.cfg");
 			if (!defaults.IsLoadable)
 			{
 				Log.error("Where is the default Kourage.cfg? Kourageous Tourists will not work properly without it!");
 				return null;
 			}
-			return defaults.Load().Node;
+			return ConfigNodeWithSteroids.from(defaults.Load().Node);
+		}
+
+		private void VerifySaveGameData()
+		{
+			// That's the thing - when you create a new game, Settings is instantiated **before** the savegame folder is created
+			// on the disk. So ReadConfigFromSaveGame() borks.
+			// In order to prevent that, we check if the data is present when this object is being destructed and, if not, create it
+			// with default values.
+			Data.ConfigNode settings = Data.ConfigNode.For(Settings.cfgRoot, "Kourage.cfg");
+			if (!settings.IsLoadable) settings.Save(Asset.ConfigNode.For(Settings.cfgRoot, "Kourage.cfg").Load().Node);
 		}
 	}
 }
