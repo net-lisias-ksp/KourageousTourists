@@ -38,21 +38,9 @@ namespace KourageousTourists
 		private static Interface GetInstance()
 		{
 			Log.dbg("Looking for {0}", typeof(Interface).Name);
-			foreach(System.Reflection.Assembly assembly in System.AppDomain.CurrentDomain.GetAssemblies())
-				foreach(System.Type type in assembly.GetTypes())
-					foreach(System.Type ifc in type.GetInterfaces() )
-					{
-						Log.dbg("Checking {0} {1} {2}", assembly, type, ifc);
-						if ("KourageousTourists.ChuteSupport+Interface" == ifc.ToString())
-						{
-							Log.dbg("Found it! {0}", ifc);
-							object r = System.Activator.CreateInstance(type);
-							Log.dbg("Type of result {0}", r.GetType());
-							return (Interface)r;
-						}
-					}
-			Log.error("No realisation for the abstract Interface found! We are doomed!");
-			return (Interface) null;
+			Interface r = (Interface)KSPe.Util.SystemTools.Interface.CreateInstanceByInterface(typeof(Interface));
+			if (null == r) Log.error("No realisation for the ChuteSupport Interface found! We are doomed!");
+			return r;
 		}
 		static ChuteSupport()
 		{

@@ -73,7 +73,7 @@ namespace KourageousTourists
 		{
 			if (KSPe.Util.KSP.Version.Current >= KSPe.Util.KSP.Version.FindByVersion(1,4,0))
 			{
-				if (KSPe.Util.SystemTools.TypeFinder.ExistsByQualifiedName("RealChute.RealChuteModule"))
+				if (KSPe.Util.SystemTools.Type.Finder.ExistsByQualifiedName("RealChute.RealChuteModule"))
 				{
 					Log.info("Loading Chute Support for KSP >= 1.4 and Real Chutes");
 					a.LoadAndStartup("KourageousTourists.KSP.Chute.14.RealChute");
@@ -86,7 +86,7 @@ namespace KourageousTourists
 			}
 			else if (KSPe.Util.KSP.Version.Current >= KSPe.Util.KSP.Version.FindByVersion(1,3,0))
 			{
-				if (KSPe.Util.SystemTools.TypeFinder.ExistsByQualifiedName("RealChute.RealChuteModule"))
+				if (KSPe.Util.SystemTools.Type.Finder.ExistsByQualifiedName("RealChute.RealChuteModule"))
 				{
 					Log.info("Loading Chute Support for KSP 1.3.x and Real Chutes");
 					a.LoadAndStartup("KourageousTourists.KSP.Chute.13.RealChute");
