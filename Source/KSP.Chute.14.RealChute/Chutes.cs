@@ -53,7 +53,7 @@ namespace KourageousTourists.KSP.Chute.RealChute14
 			chuteModule.ActivateRC();
 
 			Log.detail("counting {0} sec...", paraglidingDeployDelay);
-			yield return new WaitForSeconds (paraglidingDeployDelay); // 5 seconds to deploy chute. TODO: Make configurable
+			yield return new WaitForSeconds (paraglidingDeployDelay);
 			Log.detail("Deploying chute");
 			chuteModule.GUIDeploy();
 

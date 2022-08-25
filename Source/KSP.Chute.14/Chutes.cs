@@ -50,7 +50,7 @@ namespace KourageousTourists.KSP.Chute.Stock14
 			chuteModule.deploymentSafeState = ModuleParachute.deploymentSafeStates.UNSAFE; // FIXME: is it immediate???
 
 			Log.detail("counting {0} sec...", paraglidingDeployDelay);
-			yield return new WaitForSeconds (paraglidingDeployDelay); // 5 seconds to deploy chute. TODO: Make configurable
+			yield return new WaitForSeconds (paraglidingDeployDelay);
 			Log.detail("Deploying chute");
 			chuteModule.Deploy ();
 
