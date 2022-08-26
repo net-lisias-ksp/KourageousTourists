@@ -39,6 +39,12 @@ namespace KourageousTourists
 		protected List<ProtoCrewMember> tourists;
 		protected string hashString;
 
+		private float _difficultyMultiplier = 1.0f;
+		protected float difficultyMultiplier {
+			get => this._difficultyMultiplier;
+			set => Math.Max(0.1f, Math.Min(value, 10));
+		}
+
 		public KourageousContract() : base() {
 			this.tourists = new List<ProtoCrewMember> ();
 			this.hashString = "";
@@ -52,6 +58,53 @@ namespace KourageousTourists
 				}
 			}
 			return false;
+		}
+
+		public override bool CanBeCancelled() {
+			// TODO: Let's make that if any tourist is out of Kerbin,
+			// the contract can't be cancelled
+			return true;
+		}
+
+		public override bool CanBeDeclined() {
+			return true;
+		}
+
+		public override bool MeetRequirements ()
+		{
+			// Later we should offer the contract only after some other tourist contract were completed
+			return true;
+		}
+
+	#region Difficulty Multiplier
+
+		protected new void SetFunds(float advance, float completion, CelestialBody body = null)
+			=> base.SetFunds(
+				(float)(this.difficultyMultiplier*advance)
+				, (float)(this.difficultyMultiplier*completion)
+				, body
+			);
+
+		protected new void SetFunds(float advance, float completion, float failure, CelestialBody body = null)
+			=> base.SetFunds(
+				(float)(this.difficultyMultiplier*advance)
+				, (float)(this.difficultyMultiplier*completion)
+				, failure
+				, body
+			);
+
+		protected new void SetScience(float completion, CelestialBody body = null)
+			=> base.SetScience(
+				(float)(this.difficultyMultiplier*completion)
+				, body
+			);
+
+	#endregion
+
+		protected void SetDeadline(CelestialBody targetBody)
+		{
+			// TODO: Calculate the Deadline using the distance from homeworld to the targetBody
+			base.SetDeadlineYears(1, targetBody);
 		}
 
 		protected CelestialBody selectNextCelestialBody()

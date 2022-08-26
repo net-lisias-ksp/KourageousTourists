@@ -76,7 +76,7 @@ namespace KourageousTourists.Contracts
 
 			SetExpiry ();
 			SetScience (0.0f, targetBody);
-			SetDeadlineYears (1, targetBody);
+			this.SetDeadline(targetBody);
 			SetReputation (2, 5, targetBody);
 			SetFunds (500, 2000, 15000, targetBody);
 
@@ -105,16 +105,6 @@ namespace KourageousTourists.Contracts
 			}
 		}
 
-		public override bool CanBeCancelled() {
-			// TODO: Let's make that if any tourist is out of Kerbin, 
-			// the contract can't be cancelled
-			return true;
-		}
-
-		public override bool CanBeDeclined() {
-			return true;
-		}
-
 		protected override void GenerateHashString() {
 			string hash = "skydivecntrct-" + targetBody.bodyName;
 			foreach (ProtoCrewMember tourist in this.tourists)
@@ -133,7 +123,7 @@ namespace KourageousTourists.Contracts
 				"for safety reasons air speed for jumping out should not exceed {2} m/s, " +
 				"and altitude must be at least {3} m above the ground level. " +
 				"The skydiver should land on a solid ground. {4}",
-				getProperTouristWord (), targetBody.bodyName, 
+				getProperTouristWord (), targetBody.bodyName,
 				Settings.Instance.paraglidingMaxAirspeed,
 				Settings.Instance.paraglidingMinAltAGL,
 				trainingHint(targetBody.bodyName, null, "EVA")
@@ -167,8 +157,8 @@ namespace KourageousTourists.Contracts
 			{
 				Log.detail("buzz node node complete");
 				return false;
-			}	
-			return true;
+			}
+			return base.MeetRequirements();
 		}
 	}
 

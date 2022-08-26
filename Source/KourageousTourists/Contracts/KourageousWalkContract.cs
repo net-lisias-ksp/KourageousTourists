@@ -84,7 +84,7 @@ namespace KourageousTourists.Contracts
 
 			base.SetExpiry ();
 			base.SetScience (0.0f, targetBody);
-			base.SetDeadlineYears (1, targetBody);
+			this.SetDeadline(targetBody);
 			base.SetReputation (2, 5, targetBody);
 			base.SetFunds (2000, 7000, 18000, targetBody);
 
@@ -98,17 +98,6 @@ namespace KourageousTourists.Contracts
 				HighLogic.CurrentGame.CrewRoster.AddCrewMember (tourist);
 				Log.dbg("adding to roster: {0}", tourist.name);
 			}
-		}
-
-
-		public override bool CanBeCancelled() {
-			// TODO: Let's make that if any tourist is out of Kerbin,
-			// the contract can't be cancelled
-			return true;
-		}
-
-		public override bool CanBeDeclined() {
-			return true;
 		}
 
 		protected override void GenerateHashString() {
@@ -143,12 +132,6 @@ namespace KourageousTourists.Contracts
 			"impressed and had nothing but good time and brought back lot of memories",
 				getProperTouristWordLc(), targetBody.bodyName
 			);
-		}
-
-		public override bool MeetRequirements ()
-		{
-			// Later we should offer the contract only after some other tourist contract were completed
-			return true;
 		}
 	}
 
