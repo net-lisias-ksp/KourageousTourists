@@ -190,7 +190,7 @@ namespace KourageousTourists.Contracts
 		{
 			Log.dbg("entered KourageousAnomallyContract Generate");
 
-			targetBody = selectNextCelestialBody ();
+			targetBody = this.selectNextCelestialBody(this.getSelectableBodies());
 			if (targetBody == null)
 				return false;
 

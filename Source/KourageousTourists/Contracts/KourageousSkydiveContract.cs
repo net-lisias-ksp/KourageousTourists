@@ -40,7 +40,7 @@ namespace KourageousTourists.Contracts
 		{
 			Log.detail("skydive generate");
 
-			targetBody = selectNextCelestialBody();
+			targetBody = this.selectNextCelestialBody(this.getSelectableBodies());
 			if (targetBody == null)
 			{
 				Log.detail("target body is null");
@@ -83,18 +83,15 @@ namespace KourageousTourists.Contracts
 			return true;
 		}
 		
-		protected new CelestialBody selectNextCelestialBody()
+		protected override List<CelestialBody> getSelectableBodies()
 		{
-			List<CelestialBody> allBodies = getCelestialBodyList().Where(
+			List<CelestialBody> allBodies = this.getCelestialBodyList(true).Where(
 					b => b.atmosphere)
 					.ToList();
 			allBodies.Add(Planetarium.fetch.Home);
 
-			Log.detail("skydive bodies: {0}", String.Join(", ", allBodies.Select(b => b.ToString()).ToArray()));
-
-			if (allBodies.Count < 1)
-				return null;
-			return allBodies [UnityEngine.Random.Range (0, allBodies.Count - 1)];
+			Log.dbg("skydive bodies: {0}", String.Join(", ", allBodies.Select(b => b.ToString()).ToArray()));
+			return allBodies;
 		}
 
 		protected override void OnAccepted() {

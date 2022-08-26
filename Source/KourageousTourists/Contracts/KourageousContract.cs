@@ -107,19 +107,15 @@ namespace KourageousTourists
 			base.SetDeadlineYears(1, targetBody);
 		}
 
-		protected CelestialBody selectNextCelestialBody()
+		protected CelestialBody selectNextCelestialBody(List<CelestialBody> allBodies)
 		{
-			List<CelestialBody> allBodies = getCelestialBodyList();
-			if (allBodies.Count < 1)
-				return null;
+			if (allBodies.Count < 1) return null;
 			return allBodies[UnityEngine.Random.Range(0, allBodies.Count - 1)];
 		}
 
-		protected List<CelestialBody> getCelestialBodyList() {
-
-			List<CelestialBody> allBodies = 
-				GetBodies_Reached (false, false).Where(
-					b => b.hasSolidSurface).ToList();
+		protected List<CelestialBody> getCelestialBodyList(bool includeHome)
+		{
+			List<CelestialBody> allBodies = Contract.GetBodies_Reached(includeHome, false).ToList();
 			Log.detail("celestials: {0}", String.Join(",", allBodies.Select(b => b.ToString()).ToArray()));
 			return allBodies;
 		}
@@ -147,6 +143,8 @@ namespace KourageousTourists
 		protected override bool Generate() {
 			return false;
 		}
+
+		protected virtual List<CelestialBody> getSelectableBodies() => this.getCelestialBodyList(false);
 
 		protected override string GetHashString() {
 			return this.hashString;

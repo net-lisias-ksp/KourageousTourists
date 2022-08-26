@@ -37,7 +37,7 @@ namespace KourageousTourists.Contracts
 		{
 			Log.dbg("entered KourageousSelfieContract Generate");
 
-			targetBody = selectNextCelestialBody ();
+			targetBody = this.selectNextCelestialBody(this.getSelectableBodies());
 			if (targetBody == null)
 				return false;
 
