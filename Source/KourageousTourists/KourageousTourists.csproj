@@ -59,6 +59,8 @@
     <Compile Include="GUI\MissingDLLAlertBox.cs" />
     <Compile Include="Util\PQS.cs" />
     <Compile Include="Util\PQSDumper.cs" />
+    <Compile Include="Contracts\KourageousSwimParameter.cs" />
+    <Compile Include="Contracts\KourageousSwimContract.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
