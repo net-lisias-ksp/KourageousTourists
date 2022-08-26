@@ -57,6 +57,8 @@
     <Compile Include="EVASupport.cs" />
     <Compile Include="Properties\LegalMamboJambo.cs" />
     <Compile Include="GUI\MissingDLLAlertBox.cs" />
+    <Compile Include="Util\PQS.cs" />
+    <Compile Include="Util\PQSDumper.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -85,6 +87,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Folder Include="Contracts\" />
+    <Folder Include="Util\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\Version.tt">

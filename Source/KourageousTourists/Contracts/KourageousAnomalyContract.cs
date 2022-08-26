@@ -72,88 +72,104 @@ namespace KourageousTourists.Contracts
 			instance = null;
 		}
 
+		private void reReadAnomalyConfig()
+		{
+			this.anomalies.Clear();
+			this.readAnomalyConfig();
+		}
+
 		private void readAnomalyConfig()
 		{
 			ConfigNode config = GameDatabase.Instance.GetConfigNodes(KourageousContract.cfgRoot).FirstOrDefault();
 			if (config == null)
 				return;
 
+			Util.PQS pqs = new Util.PQS();
 
-			String distanceNode = config.GetValue ("anomalyDistance");
-			if (distanceNode != null) {
-				try {
-					anomalyDiscoveryDistance = (float)Convert.ToDouble(distanceNode);
-				}
-				catch(Exception e) {
-					Log.error(e, "KourageousAnomalyContract readAnomalyConfig");
+			{ 
+				String distanceNode = config.GetValue("anomalyDiscoveryDistance");
+				if (distanceNode != null) {
+					try {
+						anomalyDiscoveryDistance = (float)Convert.ToDouble(distanceNode);
+					}
+					catch(Exception e) {
+						Log.error(e, "KourageousAnomalyContract readAnomalyConfig");
+					}
 				}
 			}
 
 			ConfigNode[] nodes = config.GetNodes (cfgNode);
-			foreach (ConfigNode node in nodes) {
+			foreach (ConfigNode node in nodes)
+			{
+				Log.dbg("cfg node: {0}", node);
 
 				KourageousAnomaly anomaly = new KourageousAnomaly ();
 
-				Log.dbg("cfg node: {0}", node);
-				String name = node.GetValue("name");
-				if (name == null)
-					continue;
-				anomaly.name = name;
+				{ 
+					String name = node.GetValue("name");
+					if (name == null)
+						continue;
+					anomaly.name = name;
+				}
+				Log.dbg("anomaly name: {0}", anomaly.name);
 
-				Log.dbg("anomaly name: {0}", name);
-				String anomalyDescription = node.GetValue ("anomalyDescription");
-				if (anomalyDescription == null)
-					continue;
-				anomaly.anomalyDescription = anomalyDescription;
+				{ 
+					String bodyStr = node.GetValue ("body");
+					Log.dbg("anomaly body: {0}", bodyStr);
 
-				String contractDescription = node.GetValue ("contractDescription");
-				if (contractDescription == null)
-					continue;
-				anomaly.contractDescription = contractDescription;
-
-				String contractSynopsis = node.GetValue ("contractSynopsis");
-				if (contractSynopsis == null)
-					continue;
-				anomaly.contractSynopsis = contractSynopsis;
-
-				String bodyStr = node.GetValue ("body");
-				Log.dbg("anomaly body: {0}", bodyStr);
-
-				foreach (CelestialBody b in FlightGlobals.Bodies) {
-					Log.dbg("list body name: {0}", b.name);
-					if (b.name.Equals (bodyStr)) {
-						anomaly.body = b;
-						break;
+					foreach (CelestialBody b in FlightGlobals.Bodies) {
+						Log.dbg("list body name: {0}", b.name);
+						if (b.name.Equals (bodyStr)) {
+							anomaly.body = b;
+							break;
+						}
 					}
 				}
-				Log.dbg("anomaly body obj: {0}", anomaly.body == null);
-				if (anomaly.body == null)
-					continue;
+				Log.dbg("anomaly body obj: {0}", anomaly.body);
 
-				String payoutModifierStr = node.GetValue ("payoutModifier");
-				Log.dbg("payout modifier str: {0}", payoutModifierStr);
-				if (payoutModifierStr == null)
-					continue;
-				float payoutModifier = 1.0f;
-				try {
-					payoutModifier = (float)Convert.ToDouble(payoutModifierStr);
-					Log.dbg("payout modifier: {0}", payoutModifier);
-				}
-				catch(Exception e) {
-					Log.error(e, "readAnomalyConfig");
-				}
-				anomaly.payoutModifier = payoutModifier;
+				if (anomaly.body == null) continue;
+				if(!pqs.exists(anomaly.body, anomaly.name))	continue;
 
-				anomalies.Add (bodyStr + ":" + name, anomaly);
-				Log.dbg("added: {0}", bodyStr + ":" + name);
+				{ 
+					String anomalyDescription = node.GetValue ("anomalyDescription");
+					if (anomalyDescription == null) continue;
+					anomaly.anomalyDescription = anomalyDescription;
+				}
+				{ 
+					String contractDescription = node.GetValue ("contractDescription");
+					if (contractDescription == null) continue;
+					anomaly.contractDescription = contractDescription;
+				}
+				{
+					String contractSynopsis = node.GetValue ("contractSynopsis");
+					if (contractSynopsis == null)
+						continue;
+					anomaly.contractSynopsis = contractSynopsis;
+				}
+				{ 
+					String payoutModifierStr = node.GetValue ("payoutModifier");
+					Log.dbg("payout modifier str: {0}", payoutModifierStr);
+					if (payoutModifierStr == null)
+						continue;
+					float payoutModifier = 1.0f;
+					try {
+						payoutModifier = (float)Convert.ToDouble(payoutModifierStr);
+						Log.dbg("payout modifier: {0}", payoutModifier);
+					}
+					catch(Exception e) {
+						Log.error(e, "readAnomalyConfig");
+					}
+					anomaly.payoutModifier = payoutModifier;
+				}
+				anomalies.Add(anomaly.body + ":" + anomaly.name, anomaly);
+				Log.dbg("added: {0}", anomaly.body + ":" + anomaly.name);
 			}
-
 		}
 
 		protected KourageousAnomaly chooseAnomaly(CelestialBody body) {
 
 			Log.dbg("entered KourageousAnomallyContract chooseAnomaly");
-			readAnomalyConfig ();
+			reReadAnomalyConfig ();
 			Log.dbg("anomalies: {0}, distance: {1}", anomalies.Count, anomalyDiscoveryDistance);
 
 			List<KourageousAnomaly> chosen = new List<KourageousAnomaly> ();
@@ -168,7 +184,6 @@ namespace KourageousTourists.Contracts
 			Random rnd = new Random ();
 			return chosen [rnd.Next (chosen.Count)];
 		}
-
 
 		protected override bool Generate()
 			//System.Type contractType, Contract.ContractPrestige difficulty, int seed, State state)
@@ -302,7 +317,7 @@ namespace KourageousTourists.Contracts
 
 		protected override void OnLoad(ConfigNode node) {
 			base.OnLoad (node);
-			readAnomalyConfig ();
+			reReadAnomalyConfig ();
 			chosenAnomaly = KourageousAnomaly.Load (node, anomalies);
 		}
 	}
