@@ -190,6 +190,7 @@ namespace KourageousTourists.Contracts
 		protected override bool ConfigureContract()
 		{
 			base.ConfigureContract(); // Ignore the return
+			this.achievementsRequired.Add("PointOfInterest");
 
 			chosenAnomaly = chooseAnomaly (targetBody);
 			if (chosenAnomaly == null) return false;
