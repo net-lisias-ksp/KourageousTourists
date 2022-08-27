@@ -81,8 +81,10 @@ namespace KourageousTourists
 		public EVAAttempt canEVA(Vessel v)
 		{
 			if (!hasAbility("EVA")) 
-				return new EVAAttempt(String.Format("Level {0} tourists can not go EVA at all", 
-					level), false);
+				return new EVAAttempt(
+					String.Format("Level {0} tourists can not go EVA at all", level)
+					, false
+				);
 
 			string noSkyDiveMessage = "";
 			EVAAttempt attempt;
@@ -163,7 +165,10 @@ namespace KourageousTourists
 
 
 			if (!hasAbility("SkyDive")) {
-			 	return new EVAAttempt ("This tourist is not trained for skydiving!", false);
+				return new EVAAttempt(
+					String.Format("Level {0} tourists can't skydive!", level)
+					, false
+				);
 			}
 			bool srfSpeedOk = Math.Abs (v.srfSpeed) < Settings.Instance.paraglidingMaxAirspeed;
 			bool altOk = v.radarAltitude > Settings.Instance.paraglidingMinAltAGL;

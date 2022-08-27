@@ -24,22 +24,23 @@ This tiny mod empowers your every day tourists for much more kourageous adventur
 
 ### Technical Details
 
-This mod temporarily promotes tourists to crew members in order to allow them go EVA. However, actual EVA ability is restricted based on current tourist experience level and vessel situation. These restrictions are configurable with defaults as follows (note: this table **deviates from the upstream**):
+This mod temporarily promotes tourists to crew members in order to allow them go EVA. However, actual EVA ability is restricted based on current tourist experience level and vessel situation. These restrictions are configurable with defaults as follows (note: this table **deviates from the previous maintainer**):
 
 | Level | EVA allowed when	 | Jetpack  | SkyDiving |
 |:-----:|:------------------|:--------:|:--------: |    
 | 0     | Not allowed. Use Command Seats for tours ;) | No | No
-| 1     | Landed on Kerbin; surface speed below 1 m/s | No | Yes
-| 2     | Landed or Splashed on Kerbin, landed on Mün or Minmus; surface speed below 3 m/s | No | Yes
-| 3     | Landed or Splashed anywhere or being on stable orbit; no speed restrictions | No | Yes
-| 4     | Landed or Splashed anywhere or being on stable orbit; no speed restrictions | Yes | Yes
+| 1     | Landed on Kerbin; surface speed below 1 m/s | No | No
+| 2     | Landed or splashed on Kerbin; surface speed below 3 m/s | No | Yes
+| 3     | Landed, splashed or in stable orbit on Kerbin, landed or in stable orbit on Mün or Minmus; no speed restrictions | No | Yes
+| 4     | Landed, splashed or in stable orbit on Kerbin or Eve, landed or in stable orbit on Duna, Dres, Mün, Minmus, Gilly or Ike; no speed restrictions | Yes | Yes
+| 5     | Landed, splashed, in stable orbit or flying anywhere; no speed restrictions | Yes | Yes
 
 Level 5 tourists, if they survived to this, can do basically everything. Tourists gain experience just like regular crew, so for training them to level one, just take them to orbital spaceflight around Kerbin and recover. Level 2 could be obtained by Mün/Minmus landings and this is enough for every possible contract destination. You can also train them onsite using facilities that provide Level up crew function, albeit it does not seem safe enough.
 
 This fork **deviates from the previous maintainer** as follows:
 
 * Level 5 tourists can sky dive even without a contract.
-* Level 1 tourists cannot EVA outside Kerbin, but can be assigned into External Command Seats (and similar parts) for guided tours on celestial bodies.
+* Level 1 tourists cannot EVA outside Kerbin, but can be assigned into External Command Seats (and similar parts) for guided tours on celestial bodies. They don't skydive.
 * Level 0 tourists cannot EVA at all, but can also be toured using External Command Seats.
 * On all situations, Tourists can take selfies while seating on External Command Seats.
 * Tourists that can EVA are allowed to remove the Helmets (KIS needed for KSP \< 1.6).

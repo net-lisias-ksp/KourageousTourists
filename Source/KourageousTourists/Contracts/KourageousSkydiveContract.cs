@@ -105,7 +105,7 @@ namespace KourageousTourists.Contracts
 				getProperTouristWord (), targetBody.bodyName,
 				Settings.Instance.paraglidingMaxAirspeed,
 				Settings.Instance.paraglidingMinAltAGL,
-				trainingHint(targetBody.bodyName, null, "EVA")
+				trainingHint(targetBody.bodyName, null, "SkyDive")
 			);
 		}
 
