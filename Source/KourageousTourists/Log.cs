@@ -45,11 +45,16 @@ namespace KourageousTourists
 
 		public static void detail(string msg, params object[] @params)
 		{
+			log.detail(msg, @params);
+		}
+
+		public static void trace(string msg, params object[] @params)
+		{
 			StackTrace trace = new StackTrace ();
 			String caller = trace.GetFrame(1).GetMethod ().Name;
 			int line = trace.GetFrame (1).GetFileLineNumber ();
 			string submsg = $"{caller}:line {line} :: ";
-			log.detail(submsg + msg, @params);
+			log.trace(submsg + msg, @params);
 		}
 
 		public static void error(Exception e, object offended)
