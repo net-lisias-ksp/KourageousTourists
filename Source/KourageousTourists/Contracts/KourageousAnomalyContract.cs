@@ -47,6 +47,7 @@ namespace KourageousTourists.Contracts
 		public string touristSituation { get; internal set; }
 		public string touristAbility { get; internal set; }
 		public string[] achievementsRequired { get; internal set; }
+		public string poi { get; internal set; } 
 
 		public void Save(ConfigNode node) {
 			node.AddValue ("anomaly", body.name + ":" + name);
@@ -159,6 +160,9 @@ namespace KourageousTourists.Contracts
 				}
 				Log.dbg("anomaly achievementsRequired: {0}", anomaly.achievementsRequired);
 
+				anomaly.poi = node.GetValue<string>("poi", "");
+				Log.dbg("anomaly poi: {0}", anomaly.poi);
+
 				anomalies.Add(anomaly.body + ":" + anomaly.name, anomaly);
 				Log.dbg("added: {0}", anomaly.body + ":" + anomaly.name);
 			}
@@ -187,11 +191,12 @@ namespace KourageousTourists.Contracts
 		{
 			base.ConfigureContract(); // Ignore the return
 
-			this.chosenAnomaly = this.chooseAnomaly(targetBody);
-			if (null == this.chosenAnomaly) return false;
+			chosenAnomaly = chooseAnomaly (targetBody);
+			if (chosenAnomaly == null) return false;
 
-			this.achievementsRequired.UnionWith(this.chosenAnomaly.achievementsRequired);
-			this.difficultyMultiplier = this.chosenAnomaly.payoutModifier;
+			this.achievementsRequired.UnionWith(chosenAnomaly.achievementsRequired);
+			this.achievementsRequired.Add(chosenAnomaly.poi);
+			this.difficultyMultiplier = chosenAnomaly.payoutModifier;
 			return true;
 		}
 
