@@ -93,7 +93,7 @@ namespace KourageousTourists.Contracts
 					v.srfSpeed < 0.1f
 				) {
 					Log.dbg("checking for {0} at {1}", tourist, anomalyName);
-					if (this.isNearbyAnomaly (v, anomalyName)) {
+					if (this.isNearbyAnomaly (v)) {
 						base.SetComplete ();
 					}
 					break;
@@ -101,13 +101,31 @@ namespace KourageousTourists.Contracts
 			}
 		}
 
-		private bool isNearbyAnomaly(Vessel v, string anomalyName) {
-			// FIXME: Can we have objects with same names, but on different bodies?
-			// FIXME: So far I think we can.
+		private bool isNearbyAnomaly(Vessel v)
+		{
+			Transform tr = this.findAnomalyPosition();
+			if (null == tr) return false;
+
+			float dist1 = Vector3.Distance(v.transform.position, tr.position);
+			Log.dbg("distance: {0}; min dist: {1}", dist1, minAnomalyDistance);
+			if (dist1 < this.minAnomalyDistance)
+				return true;
+			return false;
+		}
+
+		private Transform findAnomalyPosition()
+		{
+			if (!Util.CelestialBodies.Instance.Exists(this.targetBody.name)) return null;
+			if (!Util.PQS.Instance.Exists(this.targetBody, this.anomalyName)) return null;
+			return Util.PQS.Instance.Get(this.targetBody, this.anomalyName).GetComponent<Transform>();
+		}
+
+		private Transform findAnomalyPositionOlder()
+		{
 			GameObject[] obj = UnityEngine.Object.FindObjectsOfType<GameObject>();
-			foreach (GameObject anomalyObj in obj) {
-				
-				Component[] c = anomalyObj.GetComponents<PQSCity> ();
+			foreach (GameObject anomalyObj in obj)
+			{
+				Component[] c = anomalyObj.GetComponents<PQSCity>();
 				if (c == null || c.Length == 0)
 					continue;
 				Log.dbg("has pqscity: {0}", anomalyObj.name);
@@ -118,18 +136,12 @@ namespace KourageousTourists.Contracts
 				if (!pqscity.sphere.isAlive)
 					continue;
 
-				Transform tr = anomalyObj.GetComponent<Transform> ();
-
-				if (!anomalyObj.name.Equals (anomalyName))
+				if (!anomalyObj.name.Equals(this.anomalyName))
 					continue;
-				if (tr == null)
-					return false;
-				float dist1 = Vector3.Distance (v.transform.position, tr.position);
-				Log.dbg("distance: {0}; min dist: {1}", dist1, minAnomalyDistance);
-				if (dist1 < this.minAnomalyDistance)
-					return true;
+
+				return anomalyObj.GetComponent<Transform>();
 			}
-			return false;
+			return null;
 		}
 	
 		protected override void OnLoad (ConfigNode node)

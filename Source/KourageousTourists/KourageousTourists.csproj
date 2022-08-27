@@ -61,6 +61,7 @@
     <Compile Include="Util\PQSDumper.cs" />
     <Compile Include="Contracts\KourageousSwimParameter.cs" />
     <Compile Include="Contracts\KourageousSwimContract.cs" />
+    <Compile Include="Util\CelestialBodies.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

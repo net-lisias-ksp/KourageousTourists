@@ -30,13 +30,24 @@ namespace KourageousTourists.Util
 {
 	internal class PQS
 	{
+		private static PQS instance = null;
+		public static PQS Instance => instance??(instance = new PQS());
+
 		private readonly Dictionary<string,PSystemBody> bodies = new Dictionary<string,PSystemBody>();
-		private readonly Dictionary<string,PQSCity[]> pqsCities = new Dictionary<string, PQSCity[]>();
-		private readonly Dictionary<string,PQSCity2[]> pqsCities2 = new Dictionary<string, PQSCity2[]>();
+		private readonly Dictionary<string,Dictionary<string,PQSCity>> pqsCities = new Dictionary<string,Dictionary<string,PQSCity>>();
+		private readonly Dictionary<string,Dictionary<string,PQSCity2>> pqsCities2 = new Dictionary<string,Dictionary<string,PQSCity2>>();
 
-		public PQS() { }
+		private PQS() { }
 
-		public bool exists(CelestialBody body, string name)
+		public PQSSurfaceObject Get(CelestialBody celestialBody, string name)
+		{
+			PSystemBody body = CelestialBodies.Instance[celestialBody.name];
+			if (this.existsPqsCity(body, name)) return this.pqsCities[body.celestialBody.name][name];
+			if (this.existsPqsCity2(body, name)) return this.pqsCities2[body.celestialBody.name][name];
+			throw new IndexOutOfRangeException(string.Format("{0}:{1}", celestialBody.name, name));
+		}
+
+		public bool Exists(CelestialBody body, string name)
 		{
 			PSystemBody pbody = this.findPSystemBody(body, PSystemManager.Instance.systemPrefab.rootBody);
 			return this.existsPqsCity(pbody, name)
@@ -47,10 +58,14 @@ namespace KourageousTourists.Util
 		private bool existsPqsCity(PSystemBody pbody, string name)
 		{
 			if (!this.pqsCities.ContainsKey(pbody.name))
-				this.pqsCities[pbody.name] = pbody.pqsVersion.GetComponentsInChildren<PQSCity>(true);
+				this.pqsCities[pbody.name] = new Dictionary<string, PQSCity>();
 
-			foreach (PQSCity p in this.pqsCities[pbody.name]) {
+			if (this.pqsCities[pbody.name].ContainsKey(name)) return true;
+
+			foreach (PQSCity p in pbody.pqsVersion.GetComponentsInChildren<PQSCity>(true))
+			{
 				Log.dbg("Checking {0}/{1}", pbody.celestialBody.name, p.name);
+				if (!this.pqsCities[pbody.name].ContainsKey(name)) this.pqsCities[pbody.name][p.name] = p;
 				if (name == p.name) return true;
 			}
 
@@ -60,10 +75,14 @@ namespace KourageousTourists.Util
 		private bool existsPqsCity2(PSystemBody pbody, string name)
 		{
 			if (!this.pqsCities2.ContainsKey(pbody.name))
-				this.pqsCities2[pbody.name] = pbody.pqsVersion.GetComponentsInChildren<PQSCity2>(true);
+				this.pqsCities2[pbody.name] = new Dictionary<string, PQSCity2>();
 
-			foreach (PQSCity2 p in this.pqsCities2[pbody.name]) { 
+			if (this.pqsCities2[pbody.name].ContainsKey(name)) return true;
+
+			foreach (PQSCity2 p in pbody.pqsVersion.GetComponentsInChildren<PQSCity2>(true))
+			{
 				Log.dbg("Checking2 {0}/{1}", pbody.celestialBody.name, p.name);
+				if (!this.pqsCities2[pbody.name].ContainsKey(name)) this.pqsCities2[pbody.name][p.name] = p;
 				if (name == p.name) return true;
 			}
 

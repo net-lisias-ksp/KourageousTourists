@@ -84,7 +84,7 @@ namespace KourageousTourists.Contracts
 			if (config == null)
 				return;
 
-			Util.PQS pqs = new Util.PQS();
+			Util.PQS pqs = Util.PQS.Instance;
 
 			{ 
 				String distanceNode = config.GetValue("anomalyDiscoveryDistance");
@@ -128,7 +128,7 @@ namespace KourageousTourists.Contracts
 				Log.dbg("anomaly body obj: {0}", anomaly.body);
 
 				if (anomaly.body == null) continue;
-				if(!pqs.exists(anomaly.body, anomaly.name))	continue;
+				if(!pqs.Exists(anomaly.body, anomaly.name))	continue;
 
 				{ 
 					String anomalyDescription = node.GetValue ("anomalyDescription");
