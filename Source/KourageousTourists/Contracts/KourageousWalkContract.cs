@@ -23,6 +23,8 @@
 
 */
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 using FinePrint.Contracts.Parameters;
 
@@ -32,64 +34,59 @@ namespace KourageousTourists.Contracts
 	{
 		public KourageousWalkContract () : base () {}
 
-		protected override bool Generate()
+		protected override bool ConfigureContract() { return true; }
+
+		protected override void GenerateTourist(ProtoCrewMember tourist)
+		{
+			// TODO: Add support for gender for 1.3 build
+			KerbalTourParameter itinerary = new KerbalTourParameter(tourist.name, tourist.gender);
+			// TODO: Add difficulty multiplier
+			itinerary.FundsCompletion = 25000.0;
+			itinerary.ReputationCompletion = 0.0f;
+			itinerary.ReputationFailure = 0.0f;
+			itinerary.ScienceCompletion = 0.0f;
+			this.AddParameter(itinerary);
+
+			KerbalDestinationParameter dstParameter = new KerbalDestinationParameter(
+				targetBody, FlightLog.EntryType.Land, tourist.name
+			);
+			dstParameter.FundsCompletion = 1000.0f;
+			dstParameter.FundsFailure = 0.0f;
+			dstParameter.ReputationCompletion = 0.0f;
+			dstParameter.ReputationFailure = 0.0f;
+			dstParameter.ScienceCompletion = 0.0f;
+			/*dstParameter.NestToParent (itinerary);
+			dstParameter.CreateID ();
+			dstParameter.AddParameter (new Contracts.Parameters.LandOnBody (targetBody));*/
+			itinerary.AddParameter(dstParameter);
+
+			KourageousWalkParameter walkParameter = new KourageousWalkParameter(targetBody, tourist.name);
+			walkParameter.FundsCompletion = 3000.0;
+			walkParameter.FundsFailure = 0.0;
+			walkParameter.ReputationCompletion = 0.0f;
+			walkParameter.ReputationFailure = 0.0f;
+			walkParameter.ScienceCompletion = 0.0f;
+			itinerary.AddParameter(walkParameter);
+		}
+
+		protected override void GenerateContract()
 			//System.Type contractType, Contract.ContractPrestige difficulty, int seed, State state)
 		{
-			Log.dbg("entered KourageousWalkContract Generate");
-
-			targetBody = this.selectNextCelestialBody(this.getSelectableBodies());
-			if (targetBody == null)
-				return false;
-
-			this.numTourists = UnityEngine.Random.Range (1, 5);
-			Log.dbg("num tourists: {0}", numTourists);
-			for (int i = 0; i < this.numTourists; i++) {
-				ProtoCrewMember tourist = CrewGenerator.RandomCrewMemberPrototype (ProtoCrewMember.KerbalType.Tourist);
-
-				tourists.Add (tourist);
-				Log.dbg("generated: {0}", tourist.name);
-
-				// TODO: Add support for gender for 1.3 build
-				KerbalTourParameter itinerary = new KerbalTourParameter (tourist.name, tourist.gender);
-				// TODO: Add difficulty multiplier
-				itinerary.FundsCompletion = 25000.0;
-				itinerary.ReputationCompletion = 0.0f;
-				itinerary.ReputationFailure = 0.0f;
-				itinerary.ScienceCompletion = 0.0f;
-				this.AddParameter (itinerary);
-
-				KerbalDestinationParameter dstParameter = new KerbalDestinationParameter (
-					targetBody, FlightLog.EntryType.Land, tourist.name
-				);
-				dstParameter.FundsCompletion = 1000.0f;
-				dstParameter.FundsFailure = 0.0f;
-				dstParameter.ReputationCompletion = 0.0f;
-				dstParameter.ReputationFailure = 0.0f;
-				dstParameter.ScienceCompletion = 0.0f;
-				/*dstParameter.NestToParent (itinerary);
-				dstParameter.CreateID ();
-				dstParameter.AddParameter (new Contracts.Parameters.LandOnBody (targetBody));*/
-				itinerary.AddParameter (dstParameter);
-
-				KourageousWalkParameter walkParameter = new KourageousWalkParameter (targetBody, tourist.name);
-				walkParameter.FundsCompletion = 3000.0;
-				walkParameter.FundsFailure = 0.0;
-				walkParameter.ReputationCompletion = 0.0f;
-				walkParameter.ReputationFailure = 0.0f;
-				walkParameter.ScienceCompletion = 0.0f;
-				itinerary.AddParameter (walkParameter);
-			}
-
-			GenerateHashString ();
-
-			base.SetExpiry ();
-			base.SetScience (0.0f, targetBody);
+			this.SetExpiry();
+			this.SetScience(0.0f, targetBody);
 			this.SetDeadline(targetBody);
-			base.SetReputation (2, 5, targetBody);
-			base.SetFunds (2000, 7000, 18000, targetBody);
+			this.SetReputation(2, 5, targetBody);
+			this.SetFunds(2000, 7000, 18000, targetBody);
+		}
 
+		protected override List<CelestialBody> getSelectableBodies()
+		{
+			List<CelestialBody> allBodies = getCelestialBodyList(false).Where(
+					b => b.hasSolidSurface)
+					.ToList();
 
-			return true;
+			Log.dbg("swim bodies: {0}", String.Join(", ", allBodies.Select(b => b.ToString()).ToArray()));
+			return allBodies;
 		}
 
 		protected override void OnAccepted() {
@@ -98,13 +95,6 @@ namespace KourageousTourists.Contracts
 				HighLogic.CurrentGame.CrewRoster.AddCrewMember (tourist);
 				Log.dbg("adding to roster: {0}", tourist.name);
 			}
-		}
-
-		protected override void GenerateHashString() {
-			string hash = "walkcntrct-" + targetBody.bodyName;
-			foreach (ProtoCrewMember tourist in this.tourists)
-				hash += tourist.name;
-			this.hashString = hash;
 		}
 
 		protected override string GetTitle () {
@@ -134,7 +124,6 @@ namespace KourageousTourists.Contracts
 			);
 		}
 	}
-
 
 }
 

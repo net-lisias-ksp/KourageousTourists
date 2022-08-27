@@ -33,62 +33,45 @@ namespace KourageousTourists.Contracts
 		public KourageousSkydiveContract() : base()
 		{
 			IgnoresWeight = true;
+			this.maxTourists = 6;
 		}
 
-		protected override bool Generate()
+		protected override bool ConfigureContract() { return true; }
+
+		protected override void GenerateTourist(ProtoCrewMember tourist)
+		{
+			KourageousSkydiveJumpParameter jumpParameter = new KourageousSkydiveJumpParameter(targetBody, tourist.name);
+			jumpParameter.FundsCompletion = 0.0;
+			jumpParameter.FundsFailure = 0.0;
+			jumpParameter.ReputationCompletion = 0.0f;
+			jumpParameter.ReputationFailure = 0.0f;
+			jumpParameter.ScienceCompletion = 0.0f;
+			AddParameter(jumpParameter);
+
+			KourageousSkydiveLandParameter landParameter = new KourageousSkydiveLandParameter(targetBody, tourist.name);
+			landParameter.FundsCompletion = 1000.0;
+			landParameter.FundsFailure = 0.0;
+			landParameter.ReputationCompletion = 0.0f;
+			landParameter.ReputationFailure = 0.0f;
+			landParameter.ScienceCompletion = 0.0f;
+			AddParameter(landParameter);
+		}
+
+		protected override void GenerateContract()
 			//System.Type contractType, Contract.ContractPrestige difficulty, int seed, State state)
 		{
-			Log.detail("skydive generate");
-
-			targetBody = this.selectNextCelestialBody(this.getSelectableBodies());
-			if (targetBody == null)
-			{
-				Log.detail("target body is null");
-				return false;
-			}
-
-			numTourists = UnityEngine.Random.Range (1, 6);
-			Log.detail("num tourists: {0}", numTourists);
-			for (int i = 0; i < this.numTourists; i++) {
-				ProtoCrewMember tourist = CrewGenerator.RandomCrewMemberPrototype (ProtoCrewMember.KerbalType.Tourist);
-
-				tourists.Add (tourist);
-				Log.detail("generated: {0}", tourist.name);
-
-				KourageousSkydiveJumpParameter jumpParameter = new KourageousSkydiveJumpParameter(targetBody, tourist.name);
-				jumpParameter.FundsCompletion = 0.0;
-				jumpParameter.FundsFailure = 0.0;
-				jumpParameter.ReputationCompletion = 0.0f;
-				jumpParameter.ReputationFailure = 0.0f;
-				jumpParameter.ScienceCompletion = 0.0f;
-				AddParameter (jumpParameter);
-				
-				KourageousSkydiveLandParameter landParameter = new KourageousSkydiveLandParameter(targetBody, tourist.name);
-				landParameter.FundsCompletion = 1000.0;
-				landParameter.FundsFailure = 0.0;
-				landParameter.ReputationCompletion = 0.0f;
-				landParameter.ReputationFailure = 0.0f;
-				landParameter.ScienceCompletion = 0.0f;
-				AddParameter (landParameter);
-			}
-
-			GenerateHashString ();
-
-			SetExpiry ();
-			SetScience (0.0f, targetBody);
+			this.SetExpiry();
+			this.SetScience(0.0f, targetBody);
 			this.SetDeadline(targetBody);
-			SetReputation (2, 5, targetBody);
-			SetFunds (500, 2000, 15000, targetBody);
-
-			return true;
+			this.SetReputation(2, 5, targetBody);
+			this.SetFunds(500, 2000, 15000, targetBody);
 		}
-		
+
 		protected override List<CelestialBody> getSelectableBodies()
 		{
-			List<CelestialBody> allBodies = this.getCelestialBodyList(true).Where(
+			List<CelestialBody> allBodies = getCelestialBodyList(true).Where(
 					b => b.atmosphere)
 					.ToList();
-			allBodies.Add(Planetarium.fetch.Home);
 
 			Log.dbg("skydive bodies: {0}", String.Join(", ", allBodies.Select(b => b.ToString()).ToArray()));
 			return allBodies;
@@ -100,13 +83,6 @@ namespace KourageousTourists.Contracts
 				HighLogic.CurrentGame.CrewRoster.AddCrewMember (tourist);
 				Log.detail("adding to roster: {0}", tourist.name);
 			}
-		}
-
-		protected override void GenerateHashString() {
-			string hash = "skydivecntrct-" + targetBody.bodyName;
-			foreach (ProtoCrewMember tourist in this.tourists)
-				hash += tourist.name;
-			this.hashString = hash;
 		}
 
 		protected override string GetTitle () {

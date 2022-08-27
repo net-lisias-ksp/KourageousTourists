@@ -27,6 +27,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Contracts;
+using TP = KSPe.Util.TextProcessing;
 
 namespace KourageousTourists
 {
@@ -44,6 +45,9 @@ namespace KourageousTourists
 			get => this._difficultyMultiplier;
 			set => Math.Max(0.1f, Math.Min(value, 10));
 		}
+
+		protected int minTourists = 1;
+		protected int maxTourists = 5;
 
 		public KourageousContract() : base() {
 			this.tourists = new List<ProtoCrewMember> ();
@@ -107,15 +111,16 @@ namespace KourageousTourists
 			base.SetDeadlineYears(1, targetBody);
 		}
 
-		protected CelestialBody selectNextCelestialBody(List<CelestialBody> allBodies)
+		protected CelestialBody selectNextCelestialBody()
 		{
+			List<CelestialBody> allBodies = this.getSelectableBodies();
 			if (allBodies.Count < 1) return null;
 			return allBodies[UnityEngine.Random.Range(0, allBodies.Count - 1)];
 		}
 
 		protected List<CelestialBody> getCelestialBodyList(bool includeHome)
 		{
-			List<CelestialBody> allBodies = Contract.GetBodies_Reached(includeHome, false).ToList();
+			List<CelestialBody> allBodies = GetBodies_Reached(includeHome, false).ToList();
 			Log.detail("celestials: {0}", String.Join(",", allBodies.Select(b => b.ToString()).ToArray()));
 			return allBodies;
 		}
@@ -123,15 +128,11 @@ namespace KourageousTourists
 		// Perhaps this is implemented somewhere in Contract.TextGen
 		protected string getProperTouristWord() {
 
-			string [] numbers = new[] {
-				"No","One","Two","Three","Four","Five","Six","Seven","Eight","Nine","Ten","Eleven","Twelve"
-			};
-
 			string t;
-			if (this.numTourists > 13)
-				t = this.numTourists.ToString();
-			else
-				t = numbers[this.numTourists];
+			if (this.numTourists > 1000)	t = this.numTourists.ToString();
+			else							t = TP.Number.To.Text(this.numTourists, true, "no");
+
+			if (t.Length > 16) t = this.numTourists.ToString();
 			return t + " tourist" + (this.numTourists > 1 ? "s" : "");
 		}
 
@@ -140,17 +141,48 @@ namespace KourageousTourists
 			return char.ToLower (t [0]) + t.Substring (1);
 		}
 
-		protected override bool Generate() {
-			return false;
+		protected sealed override bool Generate()
+		{
+			Log.dbg("entered {0} Generate", this.GetType().Name);
+
+			targetBody = selectNextCelestialBody();
+			if (targetBody == null)
+				return false;
+
+			this.numTourists = UnityEngine.Random.Range(this.minTourists, this.maxTourists);
+			Log.dbg("num tourists: {0}", numTourists);
+
+			if (!this.ConfigureContract()) return false;
+
+			for (int i = 0; i < this.numTourists; i++)
+			{
+				ProtoCrewMember tourist = CrewGenerator.RandomCrewMemberPrototype (ProtoCrewMember.KerbalType.Tourist);
+
+				this.tourists.Add(tourist);
+				Log.dbg("generated: {0}", tourist.name);
+				this.GenerateTourist(tourist);
+			}
+
+			this.GenerateHashString();
+			this.GenerateContract();
+			return true;
 		}
 
+		protected virtual bool ConfigureContract() => false;
+		protected virtual void GenerateTourist(ProtoCrewMember tourist) { }
+		protected virtual void GenerateContract() { }
 		protected virtual List<CelestialBody> getSelectableBodies() => this.getCelestialBodyList(false);
 
-		protected override string GetHashString() {
-			return this.hashString;
+		private void GenerateHashString()
+		{
+			string hash = this.GetType().FullName + targetBody.bodyName;
+			foreach (ProtoCrewMember tourist in this.tourists)
+				hash += tourist.name;
+			this.hashString = hash;
+			Log.dbg("hashString = {0}", hash);
 		}
 
-		protected virtual void GenerateHashString () {}
+		protected override string GetHashString() => this.hashString;
 
 		protected override void OnCompleted()
 		{
