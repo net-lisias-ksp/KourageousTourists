@@ -34,7 +34,11 @@ namespace KourageousTourists.Contracts
 	{
 		public KourageousWalkContract () : base () {}
 
-		protected override bool ConfigureContract() { return true; }
+		protected override bool ConfigureContract()
+		{
+			base.ConfigureContract(); // Ignore the return
+			return true;
+		}
 
 		protected override void GenerateTourist(ProtoCrewMember tourist)
 		{

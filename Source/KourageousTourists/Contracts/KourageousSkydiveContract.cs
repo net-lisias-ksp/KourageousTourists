@@ -36,7 +36,13 @@ namespace KourageousTourists.Contracts
 			this.maxTourists = 6;
 		}
 
-		protected override bool ConfigureContract() { return true; }
+		protected override bool ConfigureContract()
+		{
+			base.ConfigureContract(); // Ignore the return
+			this.achievementsRequired.Add("TowerBuzz");
+			return !Settings.Instance.noSkyDiving;
+;
+		}
 
 		protected override void GenerateTourist(ProtoCrewMember tourist)
 		{
@@ -116,22 +122,6 @@ namespace KourageousTourists.Contracts
 				"made everything right.",
 				getProperTouristWordLc()
 			);
-		}
-
-		public override bool MeetRequirements ()
-		{
-			if (Settings.Instance.noSkyDiving)
-			{
-				return false;
-			}
-			ProgressNode buzz = ProgressTracking.Instance.FindNode("TowerBuzz");
-
-			if (buzz == null || !buzz.IsComplete)
-			{
-				Log.detail("buzz node node complete");
-				return false;
-			}
-			return base.MeetRequirements();
 		}
 	}
 

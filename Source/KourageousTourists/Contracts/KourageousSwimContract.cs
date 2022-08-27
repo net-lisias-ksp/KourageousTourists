@@ -34,8 +34,12 @@ namespace KourageousTourists.Contracts
 	{
 		public KourageousSwimContract () : base () {}
 
-
-		protected override bool ConfigureContract() { return true; }
+		protected override bool ConfigureContract()
+		{
+			base.ConfigureContract(); // Ignore the return
+			this.achievementsRequired.Add("CelestialBodySplashdown");
+			return true;
+		}
 
 		protected override void GenerateTourist(ProtoCrewMember tourist)
 		{

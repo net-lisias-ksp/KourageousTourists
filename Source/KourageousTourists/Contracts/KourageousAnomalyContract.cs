@@ -44,6 +44,7 @@ namespace KourageousTourists.Contracts
 		public float payoutModifier { get; internal set; }
 		public bool reputationBonus { get; internal set; }
 		public float anomalyDiscoveryDistance { get; internal set; }
+		public string[] achievementsRequired { get; internal set; }
 
 		public void Save(ConfigNode node) {
 			node.AddValue ("anomaly", body.name + ":" + name);
@@ -64,7 +65,8 @@ namespace KourageousTourists.Contracts
 
 		internal readonly Dictionary<String, KourageousAnomaly> anomalies = new Dictionary<String, KourageousAnomaly>();
 		protected KourageousAnomaly chosenAnomaly;
-		protected float anomalyDiscoveryDistance = 50.0f;
+		private float anomalyDiscoveryDistance = 50.0f;
+		private string achievementsRequiredDef = "";
 
 		public KourageousAnomalyContract () : base()
 		{
@@ -92,6 +94,7 @@ namespace KourageousTourists.Contracts
 			Util.PQS pqs = Util.PQS.Instance;
 
 			this.anomalyDiscoveryDistance = config.GetValue<float>("anomalyDiscoveryDistance", this.anomalyDiscoveryDistance);
+			this.achievementsRequiredDef = config.GetValue<string>("achievementsRequired", this.achievementsRequiredDef);
 
 			ConfigNode[] nodes = config.GetNodes(cfgNode);
 			foreach (ConfigNode configNode in nodes)
@@ -140,6 +143,12 @@ namespace KourageousTourists.Contracts
 				anomaly.anomalyDiscoveryDistance = node.GetValue<float>("anomalyDiscoveryDistance", anomalyDiscoveryDistance);
 				Log.dbg("anomaly anomalyDiscoveryDistance: {0}", anomaly.anomalyDiscoveryDistance);
 
+				{ 
+					string achievementsRequired = node.GetValue<string>("achievementsRequired", this.achievementsRequiredDef);
+					anomaly.achievementsRequired = achievementsRequired.Split(',');
+				}
+				Log.dbg("anomaly achievementsRequired: {0}", anomaly.achievementsRequired);
+
 				anomalies.Add(anomaly.body + ":" + anomaly.name, anomaly);
 				Log.dbg("added: {0}", anomaly.body + ":" + anomaly.name);
 			}
@@ -168,11 +177,11 @@ namespace KourageousTourists.Contracts
 		{
 			base.ConfigureContract(); // Ignore the return
 
-			chosenAnomaly = chooseAnomaly (targetBody);
-			if (chosenAnomaly == null)
-				return false;
+			this.chosenAnomaly = this.chooseAnomaly(targetBody);
+			if (null == this.chosenAnomaly) return false;
 
-			this.difficultyMultiplier = chosenAnomaly.payoutModifier;
+			this.achievementsRequired.UnionWith(this.chosenAnomaly.achievementsRequired);
+			this.difficultyMultiplier = this.chosenAnomaly.payoutModifier;
 			return true;
 		}
 

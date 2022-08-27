@@ -1,0 +1,34 @@
+<CelestialBody>
+	BaseConstruction
+	CrewTransfer
+	Docking
+	Escape
+	FlagPlant
+	Flight
+	Flyby
+	Landing
+	Orbit
+	Rendezvous
+	ReturnFromFlyBy
+	ReturnFromOrbit
+	ReturnFromSurface
+	Science
+	Spacewalk
+	SplashDown
+	StationConstruction
+	Suborbit
+	SurfaceEVA
+<PointsOfInterest>
+	(See Anomalies file)
+CrewRecovery
+FirstCrewToSurvive
+FirstLaunch
+KSCLanding
+LaunchPadLanding
+ReachedSpace
+RecordsAltitude
+RecordsDepth
+RecordsDistance
+RecordsSpeed
+RunwayLanding
+TowerBuzz

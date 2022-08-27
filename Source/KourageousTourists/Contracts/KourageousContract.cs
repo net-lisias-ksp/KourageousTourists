@@ -48,6 +48,7 @@ namespace KourageousTourists
 
 		protected int minTourists = 1;
 		protected int maxTourists = 5;
+		protected readonly HashSet<string> achievementsRequired = new HashSet<string>();
 
 		public KourageousContract() : base() {
 			this.tourists = new List<ProtoCrewMember> ();
@@ -153,6 +154,7 @@ namespace KourageousTourists
 			Log.dbg("num tourists: {0}", numTourists);
 
 			if (!this.ConfigureContract()) return false;
+			if (!this.CheckRequirements()) return false;
 
 			for (int i = 0; i < this.numTourists; i++)
 			{
@@ -162,13 +164,33 @@ namespace KourageousTourists
 				Log.dbg("generated: {0}", tourist.name);
 				this.GenerateTourist(tourist);
 			}
+			// NOTE: **Never** ever return false *after* creating the crew!!!
 
-			this.GenerateHashString();
 			this.GenerateContract();
+			this.GenerateHashString();
 			return true;
 		}
 
-		protected virtual bool ConfigureContract() => false;
+		private bool CheckRequirements()
+		{
+			foreach (string ar in this.achievementsRequired)
+			{
+				ProgressNode progressNode = ProgressTracking.Instance.FindNode(ar);
+				if (progressNode == null || !progressNode.IsComplete)
+				{
+					Log.detail("{0} incomplete", ar);
+					return false;
+				}
+			}
+			return true;
+		}
+
+		protected virtual bool ConfigureContract()
+		{
+			this.achievementsRequired.Add("FirstLaunch");
+			return false;
+		}
+
 		protected virtual void GenerateTourist(ProtoCrewMember tourist) { }
 		protected virtual void GenerateContract() { }
 		protected virtual List<CelestialBody> getSelectableBodies() => this.getCelestialBodyList(false);
