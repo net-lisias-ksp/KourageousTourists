@@ -44,6 +44,8 @@ namespace KourageousTourists.Contracts
 		public float payoutModifier { get; internal set; }
 		public bool reputationBonus { get; internal set; }
 		public float anomalyDiscoveryDistance { get; internal set; }
+		public string touristSituation { get; internal set; }
+		public string touristAbility { get; internal set; }
 		public string[] achievementsRequired { get; internal set; }
 
 		public void Save(ConfigNode node) {
@@ -67,6 +69,8 @@ namespace KourageousTourists.Contracts
 		protected KourageousAnomaly chosenAnomaly;
 		private float anomalyDiscoveryDistance = 50.0f;
 		private string achievementsRequiredDef = "";
+		private string touristSituation = "LANDED";
+		private string touristAbility = "EVA";
 
 		public KourageousAnomalyContract () : base()
 		{
@@ -142,6 +146,12 @@ namespace KourageousTourists.Contracts
 
 				anomaly.anomalyDiscoveryDistance = node.GetValue<float>("anomalyDiscoveryDistance", anomalyDiscoveryDistance);
 				Log.dbg("anomaly anomalyDiscoveryDistance: {0}", anomaly.anomalyDiscoveryDistance);
+
+				anomaly.touristSituation = node.GetValue<string>("touristSituation", this.touristSituation);
+				Log.dbg("anomaly touristSituation: {0}", anomaly.touristSituation);
+
+				anomaly.touristAbility = node.GetValue<string>("touristSituation", this.touristAbility);
+				Log.dbg("anomaly touristAbility: {0}", anomaly.touristSituation);
 
 				{ 
 					string achievementsRequired = node.GetValue<string>("achievementsRequired", this.achievementsRequiredDef);
@@ -256,7 +266,7 @@ namespace KourageousTourists.Contracts
 		protected override string GetDescription() {
 			return KourageousContract.tokenize (
 				chosenAnomaly.contractDescription, getProperTouristWord(), chosenAnomaly.anomalyDiscoveryDistance,
-				trainingHint(chosenAnomaly.body.bodyName, "LANDED", "EVA", true));
+				trainingHint(chosenAnomaly.body.bodyName, chosenAnomaly.touristSituation, chosenAnomaly.touristAbility, true));
 		}
 
 		protected override string GetSynopsys() {
