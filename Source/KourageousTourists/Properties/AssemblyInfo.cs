@@ -19,6 +19,7 @@ using System.Runtime.CompilerServices;
 
 [assembly: AssemblyVersion (KourageousTourists.Version.Number)]
 [assembly: KSPAssemblyDependency("KSPe", 2, 4)]
+[assembly: KSPAssemblyDependency("KSPe.UI", 2, 4)]
 
 // The following attributes are used to specify the signing key for the assembly,
 // if desired. See the Mono documentation for more information about signing.
