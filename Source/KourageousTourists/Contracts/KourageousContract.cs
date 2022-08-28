@@ -121,7 +121,7 @@ namespace KourageousTourists
 
 		protected List<CelestialBody> getCelestialBodyList(bool includeHome)
 		{
-			List<CelestialBody> allBodies = GetBodies_Reached(includeHome, false).ToList();
+			List<CelestialBody> allBodies = Contract.GetBodies_Reached(includeHome, false).ToList();
 			Log.detail("celestials: {0}", String.Join(",", allBodies.Select(b => b.ToString()).ToArray()));
 			return allBodies;
 		}

@@ -86,7 +86,7 @@ namespace KourageousTourists.Contracts
 
 		protected override List<CelestialBody> getSelectableBodies()
 		{
-			List<CelestialBody> allBodies = getCelestialBodyList(false).Where(
+			List<CelestialBody> allBodies = this.getCelestialBodyList(false).Where(
 					b => b.ocean)
 					.ToList();
 

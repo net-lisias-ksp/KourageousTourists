@@ -91,18 +91,22 @@ namespace KourageousTourists.Util
 
 		private PSystemBody findPSystemBody(CelestialBody body, PSystemBody parent)
 		{
+			Log.dbg("findPSystemBody {0} from {1}", body.bodyName, parent.celestialBody.bodyName);
 			if (!this.bodies.ContainsKey(body.bodyName))
 			{
-				Log.dbg("findPSystemBody {0}", body.bodyName);
-				foreach (PSystemBody psb in parent.children) if(body.name == psb.celestialBody.name)
-				{
-					this.bodies[body.bodyName] = psb;
-					Log.dbg("{0} has {1} children", psb.celestialBody.name, psb.children.Count);
-					if(0 != psb.children.Count)
-						foreach(PSystemBody child in psb.children)
+				Log.dbg("findPSystemBody looking for {0}", body.bodyName);
+				foreach (PSystemBody psb in parent.children)
+					if (body.bodyName == psb.celestialBody.bodyName)
+					{
+						this.bodies[body.bodyName] = psb;
+						break;
+					}
+					else
+					{
+						Log.dbg("{0} has {1} children", psb.celestialBody.name, psb.children.Count);
+						if (0 != psb.children.Count) foreach(PSystemBody child in psb.children)
 							this.findPSystemBody(child.celestialBody, psb);
-					break;
-				}
+					}
 			}
 			return this.bodies[body.bodyName];
 		}
