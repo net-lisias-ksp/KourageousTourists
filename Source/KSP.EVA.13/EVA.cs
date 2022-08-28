@@ -24,6 +24,8 @@
 using System.Collections.Generic;
 
 using Log = KourageousTourists.Log;
+using PList = KourageousTourists.EVASupport.ProcessingLists;
+using Lists = KourageousTourists.EVASupport.ProcessingLists.Lists;
 
 namespace KourageousTourists.KSP.EVA.Stock13
 {
@@ -31,49 +33,41 @@ namespace KourageousTourists.KSP.EVA.Stock13
 	{
 		public ExtraVehicularActivity(){}
 
-		private static readonly HashSet<string> EVENT_BLACKLIST = new HashSet<string>() {
-			"MakeReference"
-		};
+		private static readonly PList PLIST = new PList(
+				new Lists(	// Actions
+					new HashSet<string>() { // WhiteList
+						"OnDeboardSeat",
+					}
+					, PList.DUMMY			// BlackList
+				)
+				,
+				new Lists(	// Events
+					new HashSet<string>() { // WhiteList
+						"OnDeboardSeat",	// For CommandSeats
+						"PlantFlag",
+						"Deploy",			// Parachutes
+						"Repack",
+						"Disarm",
+					}
+					, new HashSet<string>() { // BlackList
+						"MakeReference",
+					}
+				)
+				,
+				new Lists(	// Modules
+					PList.DUMMY					// WhileList
+					, new HashSet<string>() {	// BlackList
+						"ModuleScienceExperiment"
+					}
+				)
+			);
 
-		public void disableEvaEvents(Vessel v, bool isEvaEnabled)
-		{
-			if (null == v.evaController) return;
+		PList EVASupport.Interface.PL => PLIST;
 
-			KerbalEVA evaCtl = v.evaController;
+		bool EVASupport.Interface.isHelmetOn(Vessel v)
+			=> true; // Helmet is always on on KSP 1.3
 
-			foreach (BaseEvent e in evaCtl.Events) {
-				Log.dbg("disabling event {0} -- {1}", e.name, e.guiName);
-				e.guiActive = false;
-				e.guiActiveUnfocused = false;
-				e.guiActiveUncommand = false;
-			}
-		}
-
-		public void disableEvaEvents(Part p, bool isEvaEnabled)
-		{
-			this.disablePartEvents(p, isEvaEnabled);
-		}
-
-		private void disablePartEvents(Part p, bool isEvaEnabled)
-		{
-			foreach (BaseEvent e in p.Events) {
-				// Everything not in the Black List will stay
-				if (!EVENT_BLACKLIST.Contains(e.name)) continue;
-
-				Log.dbg("disabling event {0} -- {1}", e.name, e.guiName);
-				e.guiActive = false;
-				e.guiActiveUnfocused = false;
-				e.guiActiveUncommand = false;
-			}
-		}
-
-
-		public bool isHelmetOn(Vessel v)
-		{
-			return true; // Helmet is always on on KSP 1.4
-		}
-
-		public void equipHelmet(Vessel v) { }	// No changes allowed on KSP 1.3
-		public void removeHelmet(Vessel v) { }	// No changes allowed on KSP 1.3
+		void EVASupport.Interface.equipHelmet(Vessel v) { } // No changes allowed on KSP 1.3
+		void EVASupport.Interface.removeHelmet(Vessel v) { }  // No changes allowed on KSP 1.3
 	}
 }

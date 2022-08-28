@@ -358,7 +358,7 @@ namespace KourageousTourists
 				if (0 == roster.Count) return;
 				if (!tourists.TryGetValue(roster[0].name, out Tourist t)) return;
 				if (!Tourist.isTourist(roster[0])) return;
-				if (!t.hasAbility("EVA")) EVASupport.INSTANCE.equipHelmet(vessel);
+				if (!t.hasAbility("EVA")) EVASupport.Instance.equipHelmet(vessel);
 			}
 		}
 
@@ -398,7 +398,7 @@ namespace KourageousTourists
 			// Change crew type right away to avoid them being crew after recovery
 			crew.type = ProtoCrewMember.KerbalType.Tourist;
 
-			EVASupport.INSTANCE.disableEvaEvents(v, t.hasAbility("EVA"));
+			EVASupport.adjustEvaEvents(v, t.hasAbility("EVA"));
 			this.addSelfie(evaCtl);
 
 			Log.dbg("Initializing sound");
@@ -462,7 +462,7 @@ namespace KourageousTourists
 				Log.dbg("found crew {0}", kerbalName);
 				if (!tourists.TryGetValue(kerbalName, out Tourist t)) continue;
 				Log.dbg("crew {0} {1}", kerbalName, t.abilities);
-				EVASupport.INSTANCE.disableEvaEvents(p, t.hasAbility("EVA"));
+				EVASupport.adjustEvaEvents(p, t.hasAbility("EVA"));
 				if (p.Modules.Contains<KerbalEVA>()) this.addSelfie(p.Modules.GetModule<KerbalEVA>());
 			}
 		}
