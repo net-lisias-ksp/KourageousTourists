@@ -407,9 +407,30 @@ namespace KourageousTourists
 			getOrCreateAudio (evaCtl.part.gameObject);
 		}
 
+		private bool needsSelfie(KerbalEVA evaCtl)
+		{
+			// That's the history...
+			//
+			// Once I managed to survive the KSP Upgrade Pipeline (see around the code for details), I ended up creating a problem
+			// for the earlier KSPs where it was not implemented - as the Selfie started to be added each time you change vessel.
+			// Pretty annoying...
+			//
+			// I'm reluctant on trying to fix this crap properly because I'm almost sure this will cause collateral effects on the
+			// newer KSPs. So I decided to shove this crap here and handle the symptom instead of trying to cure the disease. (sigh)
+			//
+			// All the other related code are idempotent (i.e., doing it repeatdly doesn't changes the outcome), so this will
+			// keep things thigh on the short term - at expenses of some reprocessing. But, frankly, at this time, this is the
+			// lesser of my problems.
+			//
+			foreach (BaseEvent be in evaCtl.Events) if ("Take Selfie".Equals(be.name))
+				return false;
+			return true;
+		}
+
 		// Adding Selfie button
 		private void addSelfie(KerbalEVA evaCtl)
 		{
+			if (!this.needsSelfie(evaCtl)) return;
 			Log.dbg("Adding Selfie to {0}", evaCtl.GUIName);
 			BaseEventList pEvents = evaCtl.Events;
 			BaseEventDelegate slf = new BaseEventDelegate(TakeSelfie);
@@ -480,7 +501,7 @@ namespace KourageousTourists
 			// The aftermath is that default (stock) KerbalEVA settings are always bluntly restored on load, and
 			// we need to reapply them again by brute force.
 
-			// Interesting enough, Kerbals on Seats are autonomous, runtime created Part attached to seat.
+			// Interesting enough, Kerbals on Seats are autonomous, runtime created Parts attached to the seat!
 
 			reinitVessel (vessel);
 			reinitEvents (vessel);
