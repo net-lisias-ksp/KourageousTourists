@@ -52,17 +52,26 @@ namespace KourageousTourists.Contracts
 		public string poi { get; internal set; } 
 
 		public void Save(ConfigNode node) {
-			node.AddValue ("anomaly", body.name + ":" + name);
+			string bodyName = node.GetValue("body");
+			node.AddValue("anomalyBody", this.body.name);
+			node.AddValue("anomalyName", this.name);
 		}
 
 		public static KourageousAnomaly Load(ConfigNode node) {
-			string bodyName = node.GetValue("body");
-			string anomalyName = node.GetValue("anomaly");
+			if (node.HasValue("anomaly"))
+			{	// Try to salvage a savegame with older versions of KT!
+				string name = node.GetValue("anomaly");
+				string[] names = name.Split(':');
+				return (KourageousAnomaly)Database.Instance[names[0], names[1]].MemberwiseClone();
+			}
+
+			string bodyName = node.GetValue("anomalyBody");
+			string anomalyName = node.GetValue("anomalyName");
 			return (KourageousAnomaly)Database.Instance[bodyName, anomalyName].MemberwiseClone();
 		}
 
 		public override string ToString()
-			=> string.Format("{0}:{1}", this.body.name, name);
+			=> string.Format("{1} in {0}", this.body.name, this.name);
 	}
 
 	internal class Database
