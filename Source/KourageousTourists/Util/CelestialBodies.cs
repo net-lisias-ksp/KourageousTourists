@@ -37,15 +37,21 @@ namespace KourageousTourists.Util
 		private CelestialBodies()
 		{
 			this.build(PSystemManager.Instance.systemPrefab.rootBody);
+			#if DEBUG
+			{
+				Dictionary<string, PSystemBody>.KeyCollection keysCol = this.db.Keys;
+				List<string> keysList = new List<string>(keysCol);
+				string[] keys = keysList.ToArray();
+				Log.dbg("All known bodies: {0}", string.Join("; ", keys));
+			}
+			#endif
 		}
 
 		private void build(PSystemBody parent)
 		{
+			this.db[parent.celestialBody.name] = parent;
 			foreach (PSystemBody psb in parent.children)
-			{
-				this.db[psb.celestialBody.name] = psb;
 				this.build(psb);
-			}
 		}
 
 		public bool Exists(string name) => this.db.ContainsKey(name);

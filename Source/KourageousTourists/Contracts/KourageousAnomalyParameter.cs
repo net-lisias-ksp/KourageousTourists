@@ -117,7 +117,7 @@ namespace KourageousTourists.Contracts
 		{
 			if (!Util.CelestialBodies.Instance.Exists(this.targetBody.name)) return null;
 			if (!Util.PQS.Instance.Exists(this.targetBody, this.anomalyName)) return null;
-			return Util.PQS.Instance.Get(this.targetBody, this.anomalyName).GetComponent<Transform>();
+			return Util.PQS.Instance[this.targetBody, this.anomalyName].GetComponent<Transform>();
 		}
 
 		private Transform findAnomalyPositionOlder()
@@ -148,8 +148,8 @@ namespace KourageousTourists.Contracts
 		{
 			base.OnLoad (node);
 			this.anomalyName = String.Copy(node.GetValue ("anomalyName"));
-			KourageousAnomalyContract.Reload();
-			this.anomalyDisplayName =  KourageousAnomalyContract.Instance.anomalies [targetBody.name + ":" + anomalyName].anomalyDescription;
+			Log.dbg("OnLoading {0}:{1}", targetBody.name, anomalyName);
+			this.anomalyDisplayName =  Database.Instance[targetBody, anomalyName].anomalyDescription;
 			Log.dbg("display name: {0}", anomalyDisplayName);
 			setDistance ();
 		}

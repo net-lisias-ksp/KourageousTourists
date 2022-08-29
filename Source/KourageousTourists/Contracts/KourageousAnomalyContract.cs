@@ -28,6 +28,8 @@ using System.Linq;
 
 using FinePrint.Contracts.Parameters;
 
+using KourageousTourists.Util;
+
 using KSPe;
 
 namespace KourageousTourists.Contracts
@@ -53,41 +55,52 @@ namespace KourageousTourists.Contracts
 			node.AddValue ("anomaly", body.name + ":" + name);
 		}
 
-		public static KourageousAnomaly Load(ConfigNode node, Dictionary<String, KourageousAnomaly> anomalies) {
-			string anomalyName = node.GetValue ("anomaly");
-			return (KourageousAnomaly)anomalies [anomalyName].MemberwiseClone ();
+		public static KourageousAnomaly Load(ConfigNode node) {
+			string bodyName = node.GetValue("body");
+			string anomalyName = node.GetValue("anomaly");
+			return (KourageousAnomaly)Database.Instance[bodyName, anomalyName].MemberwiseClone();
 		}
+
+		public override string ToString()
+			=> string.Format("{0}:{1}", this.body.name, name);
 	}
 
-	public class KourageousAnomalyContract : KourageousContract
+	internal class Database
 	{
-		public const string cfgNode = "ANOMALY";
+		private static Database instance = null;
+		internal static Database Instance = instance ?? (instance = new Database());
 
-		private static KourageousAnomalyContract instance = null;
-		internal static KourageousAnomalyContract Instance = instance ?? (instance = new KourageousAnomalyContract());
+		private readonly Dictionary<String, KourageousAnomaly> anomalies = new Dictionary<String, KourageousAnomaly>();
+		public float anomalyDiscoveryDistance	{ get; private set; } = 50.0f;
+		public string achievementsRequiredDef	{ get; private set; } = "";
+		public string touristSituation			{ get; private set; } = "LANDED";
+		public string touristAbility			{ get; private set; } = "EVA";
 
-		internal readonly Dictionary<String, KourageousAnomaly> anomalies = new Dictionary<String, KourageousAnomaly>();
-		protected KourageousAnomaly chosenAnomaly;
-		private float anomalyDiscoveryDistance = 50.0f;
-		private string achievementsRequiredDef = "";
-		private string touristSituation = "LANDED";
-		private string touristAbility = "EVA";
+		private Database() => this.readAnomalyConfig();
+		~Database() => instance = null;
 
-		public KourageousAnomalyContract () : base()
+		public KourageousAnomaly this[string targetBodyName, string anomalyName]
+			=> this.anomalies[CelestialBodies.Instance[targetBodyName] + ":" + anomalyName];
+
+		public KourageousAnomaly this[CelestialBody targetBody, string anomalyName]
+			=> this.anomalies[targetBody.name + ":" + anomalyName];
+
+		private static readonly Random RND = new Random ();
+		public KourageousAnomaly chooseAnomaly(CelestialBody body)
 		{
-			this.minTourists = 2;
-			this.readAnomalyConfig();
-		}
+			Log.dbg("entered KourageousAnomallyContract chooseAnomaly");
+			Log.dbg("anomalies: {0}, distance: {1}", anomalies.Count, anomalyDiscoveryDistance);
 
-		public static void Reload()
-		{
-			instance = null;
-		}
+			List<KourageousAnomaly> chosen = new List<KourageousAnomaly> ();
+			foreach (KeyValuePair<string, KourageousAnomaly> entry in anomalies)
+				if (entry.Value.body.name.Equals (body.name))
+					chosen.Add (entry.Value);
 
-		private void reReadAnomalyConfig()
-		{
-			this.anomalies.Clear();
-			this.readAnomalyConfig();
+			Log.dbg("chosen: {0}, cnt: {1}", chosen, chosen.Count);
+			if (chosen.Count == 0)
+				return null;
+
+			return chosen[RND.Next (chosen.Count)];
 		}
 
 		private void readAnomalyConfig()
@@ -101,7 +114,7 @@ namespace KourageousTourists.Contracts
 			this.anomalyDiscoveryDistance = config.GetValue<float>("anomalyDiscoveryDistance", this.anomalyDiscoveryDistance);
 			this.achievementsRequiredDef = config.GetValue<string>("achievementsRequired", this.achievementsRequiredDef);
 
-			ConfigNode[] nodes = config.GetNodes(cfgNode);
+			ConfigNode[] nodes = config.GetNodes(KourageousAnomalyContract.cfgNode);
 			foreach (ConfigNode configNode in nodes)
 			{
 				Log.dbg("cfg node: {0}", configNode);
@@ -168,23 +181,17 @@ namespace KourageousTourists.Contracts
 			}
 		}
 
-		protected KourageousAnomaly chooseAnomaly(CelestialBody body) {
+    }
 
-			Log.dbg("entered KourageousAnomallyContract chooseAnomaly");
-			reReadAnomalyConfig ();
-			Log.dbg("anomalies: {0}, distance: {1}", anomalies.Count, anomalyDiscoveryDistance);
+	public class KourageousAnomalyContract : KourageousContract
+	{
+		public const string cfgNode = "ANOMALY";
 
-			List<KourageousAnomaly> chosen = new List<KourageousAnomaly> ();
-			foreach (KeyValuePair<string, KourageousAnomaly> entry in anomalies)
-				if (entry.Value.body.name.Equals (body.name))
-					chosen.Add (entry.Value);
+		protected KourageousAnomaly chosenAnomaly;
 
-			Log.dbg("chosen: {0}, cnt: {1}", chosen, chosen.Count);
-			if (chosen.Count == 0)
-				return null;
-
-			Random rnd = new Random ();
-			return chosen [rnd.Next (chosen.Count)];
+		public KourageousAnomalyContract () : base()
+		{
+			this.minTourists = 2;
 		}
 
 		protected override bool ConfigureContract()
@@ -192,13 +199,14 @@ namespace KourageousTourists.Contracts
 			base.ConfigureContract(); // Ignore the return
 			this.achievementsRequired.Add("PointOfInterest");
 
-			chosenAnomaly = chooseAnomaly (targetBody);
+			chosenAnomaly = Database.Instance.chooseAnomaly(targetBody);
 			if (chosenAnomaly == null) return false;
 
 			this.achievementsRequired.UnionWith(chosenAnomaly.achievementsRequired);
 			this.achievementsRequired.Add(chosenAnomaly.poi);
 			this.difficultyMultiplier = chosenAnomaly.payoutModifier;
-			return true;
+
+			return this.MeetRequirements();	// Check it again to reflect the anomaly's requirements.
 		}
 
 		protected override void GenerateTourist(ProtoCrewMember tourist)
@@ -264,9 +272,9 @@ namespace KourageousTourists.Contracts
 		}
 
 		protected override string GetTitle () {
-			Log.dbg("entered: KourageousAnomallyContract GetTitle anomaly={0}", chosenAnomaly);
+			Log.dbg("entered: KourageousAnomallyContract GetTitle anomaly={0}", this.chosenAnomaly);
 			return String.Format("Visit {0} with {1}",
-				chosenAnomaly.anomalyDescription,  getProperTouristWordLc());
+				this.chosenAnomaly.anomalyDescription,  getProperTouristWordLc());
 		}
 
 		protected override string GetDescription() {
@@ -277,13 +285,13 @@ namespace KourageousTourists.Contracts
 
 		protected override string GetSynopsys() {
 			return KourageousContract.tokenize (
-				chosenAnomaly.contractSynopsis, getProperTouristWordLc(), anomalyDiscoveryDistance);
+				chosenAnomaly.contractSynopsis, getProperTouristWordLc(), this.chosenAnomaly.anomalyDiscoveryDistance);
 		}
 
 		protected override string MessageCompleted ()
 		{
 			return KourageousContract.tokenize (chosenAnomaly.contractCompletion,
-				getProperTouristWordLc (), anomalyDiscoveryDistance);
+				getProperTouristWordLc (), this.chosenAnomaly.anomalyDiscoveryDistance);
 		}
 
 		protected override void OnSave (ConfigNode node) {
@@ -293,8 +301,7 @@ namespace KourageousTourists.Contracts
 
 		protected override void OnLoad(ConfigNode node) {
 			base.OnLoad (node);
-			reReadAnomalyConfig ();
-			chosenAnomaly = KourageousAnomaly.Load (node, anomalies);
+			this.chosenAnomaly = KourageousAnomaly.Load(node);
 		}
 	}
 }

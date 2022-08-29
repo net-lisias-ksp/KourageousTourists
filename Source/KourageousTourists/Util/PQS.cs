@@ -38,13 +38,16 @@ namespace KourageousTourists.Util
 		private readonly Dictionary<string,Dictionary<string,PQSCity2>> pqsCities2 = new Dictionary<string,Dictionary<string,PQSCity2>>();
 
 		private PQS() { }
+		~PQS() => instance = null;
 
-		public PQSSurfaceObject Get(CelestialBody celestialBody, string name)
+		public PQSSurfaceObject this[CelestialBody celestialBody, string name]
 		{
-			PSystemBody body = CelestialBodies.Instance[celestialBody.name];
-			if (this.existsPqsCity(body, name)) return this.pqsCities[body.celestialBody.name][name];
-			if (this.existsPqsCity2(body, name)) return this.pqsCities2[body.celestialBody.name][name];
-			throw new IndexOutOfRangeException(string.Format("{0}:{1}", celestialBody.name, name));
+			get { 
+				PSystemBody body = CelestialBodies.Instance[celestialBody.name];
+				if (this.existsPqsCity(body, name)) return this.pqsCities[body.celestialBody.name][name];
+				if (this.existsPqsCity2(body, name)) return this.pqsCities2[body.celestialBody.name][name];
+				throw new IndexOutOfRangeException(string.Format("{0}:{1}", celestialBody.name, name));
+			}
 		}
 
 		public bool Exists(CelestialBody body, string name)

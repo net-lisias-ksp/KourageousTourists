@@ -32,7 +32,10 @@ namespace KourageousTourists.Contracts
 {
 	public class KourageousWalkContract : KourageousContract
 	{
-		public KourageousWalkContract () : base () {}
+		public KourageousWalkContract () : base ()
+		{
+			this.achievementsRequired.Add("CelestialBodyLanding");
+		}
 
 		protected override bool ConfigureContract()
 		{

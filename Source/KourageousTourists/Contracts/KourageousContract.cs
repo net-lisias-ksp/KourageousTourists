@@ -262,7 +262,7 @@ namespace KourageousTourists
 			}
 			Log.dbg("node: {0}", node);
 			Log.dbg("tourist node: {0}", touristNode);
-			
+
 		}
 
 		protected static string tokenize(params Object[] args) {
