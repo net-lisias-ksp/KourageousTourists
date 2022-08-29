@@ -1,8 +1,8 @@
-# Kourageus Tourists /L
+# Kourageous Tourists /L
 
-Tourists sometimes should be able to go EVA. Now they can.
+Tourists sometimes should be able to go EVA. Now they can - and they have a lot to do!
 
-Fork by Lisias.
+**Kourageous Tourists /L** is Kourageous Tourists under Lisias' management.
 
 
 ## In a Hurry
@@ -13,7 +13,7 @@ Fork by Lisias.
 * Documentation
 	+ [Project's README](https://github.com/net-lisias-ksp/KourageousTourists/blob/master/README.md)
 	+ [Install Instructions](https://github.com/net-lisias-ksp/KourageousTourists/blob/master/INSTALL.md)
-	+ [Known Issues](https://github.com/net-lisias-ksp/KourageousTourists/blob/master/KNOWN_ISSUES.md)
+	+ [Issue Tracking](https://github.com/net-lisias-ksp/KourageousTourists/issues)
 	+ [Change Log](./CHANGE_LOG.md)
 	+ [TODO](./TODO.md) list
 
@@ -50,8 +50,10 @@ Jetpack fuel is drained if tourist level does not allows using it. Tourists stil
 This mod also adds three new types of contracts that depend on tourists ability to de-board the vessel. 
 
 * Walking on the surface of celestial body
+* Swimming on the hydrosphere of a celestial body (as long it have some water around)
 * Taking picture of tourist group when they walk on the surface of celestial body
-* Taking picture of tourist group when they stay nearby some point of interest (currently anomalies on Kerbin and Mün; exact location is not given, only some hints; make use of your scanners)
+* Taking picture of tourist group when they stay nearby some point of interest (exact location is not given, only some hints; make use of your scanners)
+* Two contracts for Reputation Farming - they pay too few, are laborious but can help recover your Reputation in the moments of need.
 * Needless to say that all contracts require safe recovery of all involved tourists.
 
 
@@ -93,7 +95,7 @@ Detailed installation instructions are now on its own file (see the [In a Hurry]
 			- You don't mix your work with GPL incompatible works.
 	* If by some reason the GPL would be invalid for you, rest assured that you still retain the right to Use the Work under SKL 1.0. 
 
-Releases previous to 0.5.3 are still available under the MIT license [here](https://github.com/net-lisias-kspu/KourageousTourists/tree/Source/MIT) and on the in upstream's repositories. Please note this [statement](https://www.gnu.org/licenses/license-list.en.html#Expat) from FSF.
+Releases previous to 0.5.3 are still available under the MIT license [here](https://github.com/net-lisias-ksp/KourageousTourists/tree/Source/MIT) and on the in upstream's repositories. Please note this [statement](https://www.gnu.org/licenses/license-list.en.html#Expat) from FSF.
 
 Please note the copyrights and trademarks in [NOTICE](./NOTICE).
 

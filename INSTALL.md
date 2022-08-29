@@ -1,8 +1,8 @@
-# Kourageous Tourists /L Unleashed
+# Kourageous Tourists /L
 
-Tourists sometimes should be able to go EVA. Now they can.
+Tourists sometimes should be able to go EVA. Now they can - and they have a lot to do!
 
-[Unleashed](https://ksp.lisias.net/add-ons-unleashed/) fork by Lisias.
+**Kourageous Tourists /L** is Kourageous Tourists under Lisias' management.
 
 
 ## Installation Instructions
@@ -23,20 +23,19 @@ The following file layout must be present after installation:
 ```
 <KSP_ROOT>
 	[GameData]
-		[net-lisias-ksp]
-			[KourageousTourists]
-				CHANGE_LOG.md
-				LICENSE
-				NOTICE
-				README.md
-				/KourageousTourists
-				...
+		[KourageousTourists]
+			CHANGE_LOG.md
+			LICENSE
+			NOTICE
+			README.md
+			/Plugins
+			/PluginData
+			...
 		000_KSPe.dll
 		ModuleManager.dll
 		...
 	[PluginData]
-		[net-lisias-ksp]
-			[KourageousTourists]
+		[KourageousTourists]
 				...
 	KSP.log
 	PartDatabase.cfg
@@ -46,5 +45,5 @@ The following file layout must be present after installation:
 
 ### Dependencies
 
-* [KSP API Extensions/L](https://github.com/net-lisias-ksp/KSPAPIExtensions)
+* [KSP Extensions /L](https://github.com/net-lisias-ksp/KSPe)
 	+ **Not Included** 
