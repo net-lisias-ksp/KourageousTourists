@@ -116,21 +116,22 @@ namespace KourageousTourists.Contracts
 
 		protected override string GetTitle () {
 			return String.Format("Take a photo of {0} from the surface of {1}",
-				getProperTouristWordLc(), targetBody.bodyName);
+				this.getProperTouristWord(), targetBody.bodyName);
 		}
 
-		protected override string GetDescription() {
+		protected override string GenerateDescription()
+		{
 			return String.Format (
 				"{0} want to impress friends and relatives by showing them their photos, taken on the surface of {1}. Ferry them " +
 				"there, let them out, take photos and return safely. Note that it could be a single photo of all the party " +
-				" or several photos, but every single tourist must be pictured at least once. {2}" , getProperTouristWord(),
+				" or several photos, but every single tourist must be pictured at least once. {2}" , this.getProperTouristWord(),
 				targetBody.bodyName, trainingHint(targetBody.bodyName, "LANDED", "EVA", true));
 		}
 
 		protected override string GetSynopsys() {
 			return String.Format (
 				"Ferry {0} to {1} and let them take photos of themselves.",
-				getProperTouristWordLc(), targetBody.bodyName
+				this.getProperTouristWord(), targetBody.bodyName
 			);
 		}
 
@@ -138,7 +139,7 @@ namespace KourageousTourists.Contracts
 		{
 			return String.Format ("You have successfully returned {0} from the surface of {1}. They are quite " +
 			"impressed and had nothing but good time and brought back lot of selfies.",
-				getProperTouristWordLc (), targetBody.bodyName
+				this.getProperTouristWord(), targetBody.bodyName
 			);
 		}
 	}

@@ -297,10 +297,11 @@ namespace KourageousTourists.Contracts
 		protected override string GetTitle () {
 			Log.dbg("entered: KourageousAnomallyContract GetTitle anomaly={0}", this.chosenAnomaly);
 			return String.Format("Visit {0} with {1}",
-				this.chosenAnomaly.anomalyDescription,  getProperTouristWordLc());
+				this.chosenAnomaly.anomalyDescription,  this.getProperTouristWord());
 		}
 
-		protected override string GetDescription() {
+		protected override string GenerateDescription()
+		{
 			return KourageousContract.tokenize (
 				chosenAnomaly.contractDescription, getProperTouristWord(), chosenAnomaly.anomalyDiscoveryDistance,
 				trainingHint(chosenAnomaly.body.bodyName, chosenAnomaly.touristSituation, chosenAnomaly.touristAbility, true));
@@ -308,13 +309,13 @@ namespace KourageousTourists.Contracts
 
 		protected override string GetSynopsys() {
 			return KourageousContract.tokenize (
-				chosenAnomaly.contractSynopsis, getProperTouristWordLc(), this.chosenAnomaly.anomalyDiscoveryDistance);
+				chosenAnomaly.contractSynopsis, this.getProperTouristWord(), this.chosenAnomaly.anomalyDiscoveryDistance);
 		}
 
 		protected override string MessageCompleted ()
 		{
 			return KourageousContract.tokenize (chosenAnomaly.contractCompletion,
-				getProperTouristWordLc (), this.chosenAnomaly.anomalyDiscoveryDistance);
+				this.getProperTouristWord(), this.chosenAnomaly.anomalyDiscoveryDistance);
 		}
 
 		protected override void OnSave (ConfigNode node) {

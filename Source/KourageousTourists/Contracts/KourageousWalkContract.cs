@@ -106,20 +106,21 @@ namespace KourageousTourists.Contracts
 
 		protected override string GetTitle () {
 			return String.Format("Let {0} walk on the surface of {1}",
-				getProperTouristWordLc(), targetBody.bodyName);
+				this.getProperTouristWord(), targetBody.bodyName);
 		}
 
-		protected override string GetDescription() {
+		protected override string GenerateDescription()
+		{
 			return String.Format (
 				"{0} want to practice their moon-walk by performing a real {1}-walk. Ferry them " +
-				"there, let them out and return safely. {2}", getProperTouristWord(), targetBody.bodyName,
+				"there, let them out and return safely. {2}", this.getProperTouristWord(), targetBody.bodyName,
 				trainingHint(targetBody.bodyName, "LANDED", "EVA"));
 		}
 
 		protected override string GetSynopsys() {
 			return String.Format (
 				"Ferry {0} to {1} and let them walk on the surface.",
-				getProperTouristWordLc(), targetBody.bodyName
+				this.getProperTouristWord(), targetBody.bodyName
 			);
 		}
 
@@ -127,7 +128,7 @@ namespace KourageousTourists.Contracts
 		{
 			return String.Format ("You have successfully returned {0} from the surface of {1}. They are pretty " +
 			"impressed and had nothing but good time and brought back lot of memories",
-				getProperTouristWordLc(), targetBody.bodyName
+				this.getProperTouristWord(), targetBody.bodyName
 			);
 		}
 	}

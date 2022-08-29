@@ -94,16 +94,17 @@ namespace KourageousTourists.Contracts
 
 		protected override string GetTitle () {
 			return String.Format("Let {0} experience skydiving on {1}",
-				getProperTouristWordLc(), targetBody.bodyName);
+				this.getProperTouristWord(), targetBody.bodyName);
 		}
 
-		protected override string GetDescription() {
+		protected override string GenerateDescription()
+		{
 			return String.Format (
 				"{0} just want to experience skydiving anywhere on {1}. Please note, that " +
 				"for safety reasons air speed for jumping out should not exceed {2} m/s, " +
 				"and altitude must be at least {3} m above the ground level. " +
 				"The skydiver should land on a solid ground. {4}",
-				getProperTouristWord (), targetBody.bodyName,
+				this.getProperTouristWord(), targetBody.bodyName,
 				Settings.Instance.paraglidingMaxAirspeed,
 				Settings.Instance.paraglidingMinAltAGL,
 				trainingHint(targetBody.bodyName, null, "SkyDive")
@@ -113,7 +114,7 @@ namespace KourageousTourists.Contracts
 		protected override string GetSynopsys() {
 			return String.Format (
 				"Let {0} to jump out of the aircraft somewhere on {1}.",
-				getProperTouristWordLc(), targetBody.bodyName
+				this.getProperTouristWord(), targetBody.bodyName
 			);
 		}
 
@@ -121,7 +122,7 @@ namespace KourageousTourists.Contracts
 		{
 			return String.Format ("Skydiving charter for {0} was a success! This time your parachute riggers " +
 				"made everything right.",
-				getProperTouristWordLc()
+				this.getProperTouristWord()
 			);
 		}
 	}

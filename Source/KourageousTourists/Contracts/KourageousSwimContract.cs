@@ -106,14 +106,15 @@ namespace KourageousTourists.Contracts
 
 		protected override string GetTitle () {
 			return String.Format("Let {0} swim on the hydrosphere of {1}",
-				getProperTouristWordLc(), targetBody.bodyName);
+				this.getProperTouristWord(), targetBody.bodyName);
 		}
 
-		protected override string GetDescription() {
+		protected override string GenerateDescription()
+		{
 			return String.Format(
 				"{0} want to get their feet wet by swimming on {1}. "
 				+ "Ferry them there, make them walk the plank into the waters and return them safely (sound and dry). {2}"
-				, getProperTouristWord()
+				, this.getProperTouristWord()
 				, targetBody.bodyName
 				, trainingHint(targetBody.bodyName, "SPLASHED", "EVA")
 			);
@@ -122,7 +123,7 @@ namespace KourageousTourists.Contracts
 		protected override string GetSynopsys() {
 			return String.Format(
 				"Ferry {0} to {1} and let them swim on the ocean.",
-				getProperTouristWordLc(), targetBody.bodyName
+				this.getProperTouristWord(), targetBody.bodyName
 			);
 		}
 
@@ -130,7 +131,7 @@ namespace KourageousTourists.Contracts
 		{
 			return String.Format("You have successfully returned {0} from the oceans of {1}. "
 				+ "They are pretty impressed with the beauty and vastness of that seas and had nothing but good memories from the journey.",
-				getProperTouristWordLc()
+				this.getProperTouristWord()
 				, targetBody.bodyName
 			);
 		}

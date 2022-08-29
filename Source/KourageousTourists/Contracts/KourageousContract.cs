@@ -82,6 +82,12 @@ namespace KourageousTourists
 			return true;
 		}
 
+		protected sealed override string GetDescription()
+		{
+			string r = this.GenerateDescription();
+			return char.ToUpper(r[0]) + r.Substring(1);
+		}
+
 	#region Difficulty Multiplier
 
 		protected new void SetFunds(float advance, float completion, CelestialBody body = null)
@@ -132,18 +138,13 @@ namespace KourageousTourists
 
 			string t;
 			if (this.numTourists > 1000)	t = this.numTourists.ToString();
-			else							t = TP.Number.To.Text(this.numTourists, true, "no");
+			else							t = TP.Number.To.Text(this.numTourists, false, "no");
 
 			if (t.Length > 16) t = this.numTourists.ToString();
 			return t + " tourist" + (this.numTourists > 1 ? "s" : "");
 		}
 
-		protected string getProperTouristWordLc() {
-			string t = getProperTouristWord ();
-			return char.ToLower (t [0]) + t.Substring (1);
-		}
-
-		protected sealed override bool Generate()
+		protected override bool Generate()
 		{
 			Log.dbg("entered {0} Generate", this.GetType().Name);
 
@@ -202,6 +203,7 @@ namespace KourageousTourists
 
 		protected virtual void GenerateTourist(ProtoCrewMember tourist) { }
 		protected virtual void GenerateContract() { }
+		protected virtual string GenerateDescription() { return ""; }
 		protected virtual List<CelestialBody> getSelectableBodies() => this.getCelestialBodyList(false);
 
 		private void GenerateHashString()
