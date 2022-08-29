@@ -82,8 +82,7 @@ namespace KourageousTourists
 
 			GameEvents.OnVesselRecoveryRequested.Add (OnVesselRecoveryRequested);
 
-			if (!HighLogic.LoadedSceneIsFlight)
-				return;
+			if (!HighLogic.LoadedSceneIsFlight) return;
 
 			if (tourists == null)
 				tourists = new Dictionary<String, Tourist> ();
@@ -110,10 +109,26 @@ namespace KourageousTourists
 		}
 
 		public void OnDestroy() {
-			if (!HighLogic.LoadedSceneIsGame || null == FlightGlobals.VesselsLoaded) return;
+			Log.dbg("entered OnDestroy");
+			// Ignore non-career game mode
+			if (HighLogic.CurrentGame == null
+				|| (!Settings.Instance.forceTouristsInSandbox && HighLogic.CurrentGame.Mode != Game.Modes.CAREER))
+			{
+				return;
+			}
+
+			Log.detail("scene: {0}", HighLogic.LoadedScene);
+
+			GameEvents.OnVesselRecoveryRequested.Remove(OnVesselRecoveryRequested);
+
+			tourists = null;
+			smile = false;
+			taken = false;
+			fx = null;
+
+			if (!HighLogic.LoadedSceneIsFlight) return;
 
 			// Switch tourists back
-			Log.dbg("entered OnDestroy");
 			try {
 				Log.dbg("VesselsLoaded: {0}", FlightGlobals.VesselsLoaded);
 				foreach (Vessel v in FlightGlobals.VesselsLoaded) {
@@ -146,13 +161,6 @@ namespace KourageousTourists
 			GameEvents.onAttemptEva.Remove(OnAttemptEVA);
 			GameEvents.onFlightReady.Remove(OnFlightReady);
 			GameEvents.onVesselGoOffRails.Remove(OnVesselGoOffRails);
-
-			GameEvents.OnVesselRecoveryRequested.Remove(OnVesselRecoveryRequested);
-
-			tourists = null;
-			smile = false;
-			taken = false;
-			fx = null;
 		}
 
 		private void OnEvaStart(GameEvents.FromToAction<Part, Part> evaData) {
