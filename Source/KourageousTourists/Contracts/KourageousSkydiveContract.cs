@@ -77,7 +77,7 @@ namespace KourageousTourists.Contracts
 		protected override List<CelestialBody> getSelectableBodies()
 		{
 			List<CelestialBody> allBodies = getCelestialBodyList(true).Where(
-					b => b.atmosphere)
+					b => b.atmosphere && b.hasSolidSurface)
 					.ToList();
 
 			Log.dbg("skydive bodies: {0}", String.Join(", ", allBodies.Select(b => b.ToString()).ToArray()));
