@@ -4,8 +4,8 @@
 	Docking
 	Escape
 	FlagPlant
-	Flight
-	Flyby
+	Flight			Not applicable to Kerbin!
+	Flyby			Not applicable to Kerbin!
 	Landing
 	Orbit
 	Rendezvous
@@ -16,7 +16,7 @@
 	Spacewalk
 	SplashDown
 	StationConstruction
-	Suborbit
+	Suborbit		Not applicable to Kerbin!
 	SurfaceEVA
 <PointsOfInterest>
 	(See Anomalies file)

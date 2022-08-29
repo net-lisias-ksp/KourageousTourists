@@ -40,8 +40,12 @@ namespace KourageousTourists.Util
 					case "Docking":					return null != p.docking && p.docking.IsComplete;
 					case "Escape":					return null != p.escape && p.escape.IsComplete;
 					case "FlagPlant":				return null != p.flagPlant && p.flagPlant.IsComplete;
-					case "Flight":					return null != p.flight && p.flight.IsComplete;
-					case "Flyby":					return null != p.flyBy && p.flyBy.IsComplete;
+					case "Flight":					return CelestialBodies.Instance.IsHome(targetBody)
+														|| (null != p.flight && p.flight.IsComplete)
+														;
+					case "Flyby":					return CelestialBodies.Instance.IsHome(targetBody)
+														|| (null != p.flyBy && p.flyBy.IsComplete)
+														;
 					case "Landing":					return null != p.landing && p.landing.IsComplete;
 					case "Orbit":					return null != p.orbit && p.orbit.IsComplete;
 					case "Rendezvous":				return null != p.rendezvous && p.rendezvous.IsComplete;
@@ -52,7 +56,9 @@ namespace KourageousTourists.Util
 					case "Spacewalk":				return null != p.spacewalk && p.spacewalk.IsComplete;
 					case "SplashDown":				return null != p.splashdown && p.splashdown.IsComplete;
 					case "StationConstruction":		return null != p.stationConstruction && p.stationConstruction.IsComplete;
-					case "Suborbit":				return null != p.suborbit && p.suborbit.IsComplete;
+					case "Suborbit":				return CelestialBodies.Instance.IsHome(targetBody)
+														|| (null != p.suborbit && p.suborbit.IsComplete)
+														;
 					case "SurfaceEVA":				return null != p.surfaceEVA && p.surfaceEVA.IsComplete;
 
 					default: return false;

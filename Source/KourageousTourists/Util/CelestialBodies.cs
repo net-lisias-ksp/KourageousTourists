@@ -32,17 +32,20 @@ namespace KourageousTourists.Util
 		private static CelestialBodies instance = null;
 		public static CelestialBodies Instance => instance??(instance = new CelestialBodies());
 
+		public readonly PSystemBody HomeWorld;
 		private readonly Dictionary<string, PSystemBody> db = new Dictionary<string, PSystemBody>();
 
 		private CelestialBodies()
 		{
 			this.build(PSystemManager.Instance.systemPrefab.rootBody);
+			this.HomeWorld = this[FlightGlobals.GetHomeBody()];
 			#if DEBUG
 			{
 				Dictionary<string, PSystemBody>.KeyCollection keysCol = this.db.Keys;
 				List<string> keysList = new List<string>(keysCol);
 				string[] keys = keysList.ToArray();
 				Log.dbg("All known bodies: {0}", string.Join("; ", keys));
+				Log.dbg("Home body is: {0}", this.HomeWorld.celestialBody.name);
 			}
 			#endif
 		}
@@ -55,6 +58,9 @@ namespace KourageousTourists.Util
 		}
 
 		public bool Exists(string name) => this.db.ContainsKey(name);
-		public PSystemBody this[string index] => this.db[index];
+		public PSystemBody this[string bodyname] => this.db[bodyname];
+		public PSystemBody this[CelestialBody body] => this.db[body.name];
+		public bool IsHome(CelestialBody body) => body.name == this.HomeWorld.celestialBody.name;
+		public bool IsHome(PSystemBody body) => body.name == this.HomeWorld.name;
 	}
 }
