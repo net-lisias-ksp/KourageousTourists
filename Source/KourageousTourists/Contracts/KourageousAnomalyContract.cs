@@ -163,8 +163,8 @@ namespace KourageousTourists.Contracts
 				anomaly.poi = node.GetValue<string>("poi", "");
 				Log.dbg("anomaly poi: {0}", anomaly.poi);
 
-				anomalies.Add(anomaly.body + ":" + anomaly.name, anomaly);
-				Log.dbg("added: {0}", anomaly.body + ":" + anomaly.name);
+				anomalies.Add(anomaly.body.name + ":" + anomaly.name, anomaly);
+				Log.dbg("added: {0}", anomaly.body.name + ":" + anomaly.name);
 			}
 		}
 
