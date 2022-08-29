@@ -39,9 +39,10 @@ namespace KourageousTourists.Contracts
 		protected override bool ConfigureContract()
 		{
 			base.ConfigureContract(); // Ignore the return
+			this.achievementsRequired.Add("RunwayLanding");
 			this.achievementsRequired.Add("TowerBuzz");
+			this.celestialBodyAccomplishmentsRequired.Add("Flight");
 			return !Settings.Instance.noSkyDiving;
-;
 		}
 
 		protected override void GenerateTourist(ProtoCrewMember tourist)

@@ -32,14 +32,14 @@ namespace KourageousTourists.Contracts
 {
 	public class KourageousSwimContract : KourageousContract
 	{
-		public KourageousSwimContract () : base ()
-		{
-			this.achievementsRequired.Add("CelestialBodySplashdown");
-		}
+		public KourageousSwimContract () : base () { }
 
 		protected override bool ConfigureContract()
 		{
 			base.ConfigureContract(); // Ignore the return
+			this.celestialBodyAccomplishmentsRequired.Add("SplashDown");
+			this.celestialBodyAccomplishmentsRequired.Add("SurfaceEVA");
+			this.celestialBodyAccomplishmentsRequired.Add("ReturnFromSurface");
 			return true;
 		}
 

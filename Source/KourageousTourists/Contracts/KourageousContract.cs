@@ -49,6 +49,7 @@ namespace KourageousTourists
 		protected int minTourists = 1;
 		protected int maxTourists = 5;
 		protected readonly HashSet<string> achievementsRequired = new HashSet<string>();
+		protected readonly HashSet<string> celestialBodyAccomplishmentsRequired = new HashSet<string>();
 
 		public KourageousContract() : base() {
 			this.tourists = new List<ProtoCrewMember> ();
@@ -168,7 +169,7 @@ namespace KourageousTourists
 
 			this.GenerateContract();
 			this.GenerateHashString();
-			return true;
+			return this.CheckRequirements();
 		}
 
 		private bool CheckRequirements()
@@ -182,6 +183,14 @@ namespace KourageousTourists
 					return false;
 				}
 			}
+
+			foreach (string cbar in this.celestialBodyAccomplishmentsRequired)
+				if (!Util.Progression.IsComplete(this.targetBody, cbar))
+				{
+					Log.detail("{0} in {1} incomplete", cbar, this.targetBody.name);
+					return false;
+				}
+
 			return true;
 		}
 

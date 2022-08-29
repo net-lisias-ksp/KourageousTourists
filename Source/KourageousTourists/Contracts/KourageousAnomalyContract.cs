@@ -49,6 +49,7 @@ namespace KourageousTourists.Contracts
 		public string touristSituation { get; internal set; }
 		public string touristAbility { get; internal set; }
 		public string[] achievementsRequired { get; internal set; }
+		public string[] celestialBodyAccomplishmentsRequired  { get; internal set; }
 		public string poi { get; internal set; } 
 
 		public void Save(ConfigNode node) {
@@ -82,6 +83,7 @@ namespace KourageousTourists.Contracts
 		private readonly Dictionary<String, KourageousAnomaly> anomalies = new Dictionary<String, KourageousAnomaly>();
 		public float anomalyDiscoveryDistance	{ get; private set; } = 50.0f;
 		public string achievementsRequiredDef	{ get; private set; } = "";
+		public string celestialBodyAccomplishmentsRequiredDef { get; private set; } = "";
 		public string touristSituation			{ get; private set; } = "LANDED";
 		public string touristAbility			{ get; private set; } = "EVA";
 
@@ -122,6 +124,7 @@ namespace KourageousTourists.Contracts
 
 			this.anomalyDiscoveryDistance = config.GetValue<float>("anomalyDiscoveryDistance", this.anomalyDiscoveryDistance);
 			this.achievementsRequiredDef = config.GetValue<string>("achievementsRequired", this.achievementsRequiredDef);
+			this.celestialBodyAccomplishmentsRequiredDef = config.GetValue<string>("celestialBodyAccomplishmentsRequired", this.celestialBodyAccomplishmentsRequiredDef);
 
 			ConfigNode[] nodes = config.GetNodes(KourageousAnomalyContract.cfgNode);
 			foreach (ConfigNode configNode in nodes)
@@ -182,6 +185,14 @@ namespace KourageousTourists.Contracts
 				}
 				Log.dbg("anomaly achievementsRequired: {0}", anomaly.achievementsRequired);
 
+				{ 
+					string celestialBodyAccomplishmentsRequired = node.GetValue<string>("celestialBodyAccomplishmentsRequired", this.celestialBodyAccomplishmentsRequiredDef);
+					string[] sa = celestialBodyAccomplishmentsRequired.Split(',');
+					for (int i = 0; i < sa.Length; ++i) sa[i] = sa[i].Trim();
+					anomaly.celestialBodyAccomplishmentsRequired = sa;
+				}
+				Log.dbg("anomaly celestialBodyAccomplishmentsRequired: {0}", anomaly.celestialBodyAccomplishmentsRequired);
+
 				anomaly.poi = node.GetValue<string>("poi", "");
 				Log.dbg("anomaly poi: {0}", anomaly.poi);
 
@@ -206,16 +217,19 @@ namespace KourageousTourists.Contracts
 		protected override bool ConfigureContract()
 		{
 			base.ConfigureContract(); // Ignore the return
-			this.achievementsRequired.Add("PointOfInterest");
+			this.achievementsRequired.Add("FirstLaunch");
 
 			chosenAnomaly = Database.Instance.chooseAnomaly(targetBody);
 			if (chosenAnomaly == null) return false;
 
 			this.achievementsRequired.UnionWith(chosenAnomaly.achievementsRequired);
 			this.achievementsRequired.Add(chosenAnomaly.poi);
+
+			this.celestialBodyAccomplishmentsRequired.UnionWith(chosenAnomaly.celestialBodyAccomplishmentsRequired);
+
 			this.difficultyMultiplier = chosenAnomaly.payoutModifier;
 
-			return this.MeetRequirements();	// Check it again to reflect the anomaly's requirements.
+			return true;
 		}
 
 		protected override void GenerateTourist(ProtoCrewMember tourist)

@@ -40,6 +40,8 @@ namespace KourageousTourists.Contracts
 		protected override bool ConfigureContract()
 		{
 			base.ConfigureContract(); // Ignore the return
+			this.celestialBodyAccomplishmentsRequired.Add("Landing");
+			this.celestialBodyAccomplishmentsRequired.Add("ReturnFromSurface");
 			return true;
 		}
 
