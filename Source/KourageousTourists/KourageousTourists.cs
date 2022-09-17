@@ -59,7 +59,7 @@ namespace KourageousTourists
 
 		public static EventVoid selfieListeners = new EventVoid("Selfie");
 
-		public KourageousTouristsAddOn ()
+		public KourageousTouristsAddOn() : base()
 		{
 		}
 
@@ -111,8 +111,9 @@ namespace KourageousTourists
 		public void OnDestroy() {
 			Log.dbg("entered OnDestroy");
 			// Ignore non-career game mode
-			if (HighLogic.CurrentGame == null
-				|| (!Settings.Instance.forceTouristsInSandbox && HighLogic.CurrentGame.Mode != Game.Modes.CAREER))
+			if (null == HighLogic.CurrentGame
+				|| !(Settings.Instance.forceTouristsInSandbox || HighLogic.CurrentGame.Mode == Game.Modes.CAREER)
+				)
 			{
 				return;
 			}
