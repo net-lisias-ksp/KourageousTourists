@@ -36,14 +36,16 @@ namespace KourageousTourists.KSP.EVA.Stock13
 		private static readonly PList PLIST = new PList(
 				new Lists(	// Actions
 					new HashSet<string>() { // WhiteList
-						"OnDeboardSeat",
+						"OnDeboardSeat",			// For CommandSeats
+
 					}
 					, PList.DUMMY			// BlackList
 				)
 				,
 				new Lists(	// Events
 					new HashSet<string>() { // WhiteList
-						"OnDeboardSeat",	// For CommandSeats
+						"OnDeboardSeat",			// For CommandSeats
+
 						"PlantFlag",
 						"Deploy",			// Parachutes
 						"Repack",
