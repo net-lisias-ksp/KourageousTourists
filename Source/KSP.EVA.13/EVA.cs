@@ -42,7 +42,6 @@ namespace KourageousTourists.KSP.EVA.Stock13
 						"Cut main chute",
 						"Arm parachute",
 						"Disarm parachute",
-
 					}
 					, PList.DUMMY			// BlackList
 				)
@@ -62,6 +61,20 @@ namespace KourageousTourists.KSP.EVA.Stock13
 
 						"DeployFully",				// For Vanguard Technologies / EVA Parachutes and Ejection Seats
 						"DeploySemi",
+
+						"Follow",					// Eva Follower
+						"Stay",
+						"SetPoint",
+						"Wait",
+						"Patrol",
+						"EndPatrol",
+						"PatrolRun",
+						"PatrolWalk",
+						"ToggleHelmet",
+						"StartWanderer",
+						"Debug",					// EVA Follower DEBUG mode
+						"ClearSave",
+						"Load"
 					}
 					, new HashSet<string>() { // BlackList
 						"MakeReference",

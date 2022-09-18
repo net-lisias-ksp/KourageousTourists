@@ -61,6 +61,20 @@ namespace KourageousTourists.KSP.EVA.KIS13
 
 						"DeployFully",				// For Vanguard Technologies / EVA Parachutes and Ejection Seats
 						"DeploySemi",
+
+						"Follow",					// Eva Follower
+						"Stay",
+						"SetPoint",
+						"Wait",
+						"Patrol",
+						"EndPatrol",
+						"PatrolRun",
+						"PatrolWalk",
+						"ToggleHelmet",
+						"StartWanderer",
+						"Debug",					// EVA Follower DEBUG mode
+						"ClearSave",
+						"Load",
 					}
 					, new HashSet<string>() { // BlackList
 						"MakeReference"
