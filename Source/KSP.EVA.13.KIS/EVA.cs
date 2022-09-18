@@ -38,6 +38,8 @@ namespace KourageousTourists.KSP.EVA.KIS13
 					new HashSet<string>() { // WhiteList
 						"OnDeboardSeat",			// For CommandSeats
 
+						"Release",					// For KIS
+
 						"Deploy chute",				// For Real Chute
 						"Cut main chute",
 						"Arm parachute",
@@ -51,6 +53,11 @@ namespace KourageousTourists.KSP.EVA.KIS13
 						"OnDeboardSeat",			// For CommandSeats
 
 						"PlantFlag",
+
+						"TogglePlayStateEvent",		// For KIS
+						"ReleaseEvent",
+						"ToggleInventoryEvent",
+						"ToggleDoorsEvent",
 
 						"GUIDeploy",				// For Real Chute
 						"GUIArm",
