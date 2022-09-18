@@ -40,6 +40,11 @@ namespace KourageousTourists.KSP.EVA.Stock16
 
 						"Deploy Chute",				// For Stock Chutes
 						"Cut Chute",
+
+						"Deploy chute",				// For Real Chute
+						"Cut main chute",
+						"Arm parachute",
+						"Disarm parachute",
 					}
 					, PList.DUMMY			// BlackList
 				)
@@ -59,6 +64,13 @@ namespace KourageousTourists.KSP.EVA.Stock16
 						"Deploy",					// Stock Parachutes
 						"Repack",
 						"Disarm",
+
+						"GUIDeploy",				// For Real Chute
+						"GUIArm",
+						"GUIDisarm",
+						"GUICut",
+						"GUIRepack",
+						"GUIToggleWindow",
 					}
 					, new HashSet<string>() { // BlackList
 						"MakeReference"

@@ -37,6 +37,11 @@ namespace KourageousTourists.KSP.EVA.KIS13
 				new Lists(	// Actions
 					new HashSet<string>() { // WhiteList
 						"OnDeboardSeat",			// For CommandSeats
+
+						"Deploy chute",				// For Real Chute
+						"Cut main chute",
+						"Arm parachute",
+						"Disarm parachute",
 					}
 					, PList.DUMMY			// BlackList
 				)
@@ -46,6 +51,13 @@ namespace KourageousTourists.KSP.EVA.KIS13
 						"OnDeboardSeat",			// For CommandSeats
 
 						"PlantFlag",
+
+						"GUIDeploy",				// For Real Chute
+						"GUIArm",
+						"GUIDisarm",
+						"GUICut",
+						"GUIRepack",
+						"GUIToggleWindow",
 					}
 					, new HashSet<string>() { // BlackList
 						"MakeReference"
