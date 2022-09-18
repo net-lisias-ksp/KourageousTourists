@@ -71,6 +71,10 @@ namespace KourageousTourists.KSP.EVA.Stock16
 						"GUICut",
 						"GUIRepack",
 						"GUIToggleWindow",
+
+						"DeployFully",				// For Vanguard Technologies / EVA Parachutes and Ejection Seats
+						"DeploySemi",
+
 					}
 					, new HashSet<string>() { // BlackList
 						"MakeReference"

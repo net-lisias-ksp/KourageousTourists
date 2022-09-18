@@ -9,7 +9,7 @@ VERSIONFILE="$PACKAGE.version"
 
 DLLS="KourageousTourists"
 # PluginData DLLs
-PD_DLLS="KourageousTourists.KSP.Chute.13.RealChute KourageousTourists.KSP.Chute.14 KourageousTourists.KSP.Chute.14.RealChute KourageousTourists.KSP.EVA.13 KourageousTourists.KSP.EVA.13.KIS KourageousTourists.KSP.EVA.16"
+PD_DLLS="KourageousTourists.KSP.Chute.13.VanguardTechnologies KourageousTourists.KSP.Chute.14.VanguardTechnologies KourageousTourists.KSP.Chute.13.RealChute KourageousTourists.KSP.Chute.14 KourageousTourists.KSP.Chute.14.RealChute KourageousTourists.KSP.EVA.13 KourageousTourists.KSP.EVA.13.KIS KourageousTourists.KSP.EVA.16"
 # Rule oriented deployoment for PluginData
 #declare -A PD_SUB_RULES=( ["KSPe.UI.12"]="./12x/KSPe.UI" ["KSPe.UI.14"]="./14x/KSPe.UI" ["KSPe.UI.18"]="./18x/KSPe.UI" )
 declare -A PD_SUB_RULES=( )

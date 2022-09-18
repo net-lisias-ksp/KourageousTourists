@@ -52,9 +52,16 @@ namespace KourageousTourists.KSP.EVA.Stock13
 						"OnDeboardSeat",			// For CommandSeats
 
 						"PlantFlag",
-						"Deploy",			// Parachutes
-						"Repack",
-						"Disarm",
+
+						"GUIDeploy",				// For Real Chute
+						"GUIArm",
+						"GUIDisarm",
+						"GUICut",
+						"GUIRepack",
+						"GUIToggleWindow",
+
+						"DeployFully",				// For Vanguard Technologies / EVA Parachutes and Ejection Seats
+						"DeploySemi",
 					}
 					, new HashSet<string>() { // BlackList
 						"MakeReference",
