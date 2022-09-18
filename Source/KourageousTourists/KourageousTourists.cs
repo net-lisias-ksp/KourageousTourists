@@ -234,7 +234,9 @@ namespace KourageousTourists
 				for (int i = 30; i > 0; --i) yield return null;
 				ScreenMessages.PostScreenMessage ("<color=red>IS</color>");
 				for (int i = 30; i > 0; --i) yield return null;
-				ScreenMessages.PostScreenMessage ("<color=red>MY PARACHUTES???</color>");
+				ScreenMessages.PostScreenMessage ("<color=red>MY</color>");
+				for (int i = 30; i > 0; --i) yield return null;
+				ScreenMessages.PostScreenMessage ("<color=red>PARACHUTES???</color>");
 			}
 			yield break;
 		}

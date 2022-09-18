@@ -42,7 +42,7 @@ namespace KourageousTourists.Contracts
 			this.achievementsRequired.Add("RunwayLanding");
 			this.achievementsRequired.Add("TowerBuzz");
 			this.celestialBodyAccomplishmentsRequired.Add("Flight");
-			return !Settings.Instance.noSkyDiving;
+			return !(Settings.Instance.noSkyDiving || null == ChuteSupport.INSTANCE); // Can't issue SkyDiving contracts withuot a Parachute!
 		}
 
 		protected override void GenerateTourist(ProtoCrewMember tourist)
