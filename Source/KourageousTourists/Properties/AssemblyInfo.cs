@@ -23,7 +23,7 @@ using System.Runtime.CompilerServices;
 [assembly: KSPAssemblyDependency("KSPe", 2, 4)]
 [assembly: KSPAssemblyDependency("KSPe.UI", 2, 4)]
 #else
-[assembly: KSPAssemblyDependency("KSPe.Light.KT", 2, 4)]
+[assembly: KSPAssemblyDependency("KSPe.Light.KourageousTourists", 2, 4)]
 #endif
 
 // The following attributes are used to specify the signing key for the assembly,
