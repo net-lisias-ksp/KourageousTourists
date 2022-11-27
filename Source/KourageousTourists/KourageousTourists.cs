@@ -69,8 +69,8 @@ namespace KourageousTourists
 
 			Settings.Instance.Read();
 
-			Log.detail("highlogic: {0}", HighLogic.fetch);
-			Log.detail("game: {0}", HighLogic.CurrentGame);
+			Log.dbg("highlogic: {0}", HighLogic.fetch);
+			Log.dbg("game: {0}", HighLogic.CurrentGame);
 
 			// Ignore non-career game mode
 			if (HighLogic.CurrentGame == null
@@ -118,7 +118,7 @@ namespace KourageousTourists
 				return;
 			}
 
-			Log.detail("scene: {0}", HighLogic.LoadedScene);
+			Log.dbg("scene: {0}", HighLogic.LoadedScene);
 
 			GameEvents.OnVesselRecoveryRequested.Remove(OnVesselRecoveryRequested);
 

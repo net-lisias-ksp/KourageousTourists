@@ -41,7 +41,7 @@ The problem detected is that {0}.";
 				AMSG,
 				() => { Application.Quit(); }
 			);
-			Log.detail("\"Houston, we have a Problem!\" was displayed about {0}", reason);
+			Log.force("\"Houston, we have a Problem!\" was displayed about {0}", reason);
 		}
 	}
 }

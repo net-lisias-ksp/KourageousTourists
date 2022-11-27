@@ -48,7 +48,7 @@ namespace KourageousTourists
 
 		private void Awake()
 		{
-			Log.detail("Startup.Awake() {0}");
+			Log.dbg("Startup.Awake() {0}");
 			using (KSPe.Util.SystemTools.Assembly.Loader<Startup> a = new KSPe.Util.SystemTools.Assembly.Loader<Startup>())
 			{
 				try
