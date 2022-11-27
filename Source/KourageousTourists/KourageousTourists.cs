@@ -129,6 +129,20 @@ namespace KourageousTourists
 
 			if (!HighLogic.LoadedSceneIsFlight) return;
 
+			GameEvents.onVesselRecovered.Remove(OnVesselRecoveredOffGame);
+			GameEvents.onKerbalLevelUp.Remove(OnKerbalLevelUp);
+			GameEvents.onCrewOnEva.Remove(OnEvaStart);
+			GameEvents.onCrewBoardVessel.Remove(OnCrewBoardVessel);
+			GameEvents.onVesselWillDestroy.Remove(OnVesselWillDestroy);
+			GameEvents.onVesselLoaded.Remove(OnVesselLoad);
+			GameEvents.onVesselChange.Remove(OnVesselChange);
+			GameEvents.onVesselCreate.Remove(OnVesselCreate);
+			GameEvents.onNewVesselCreated.Remove(OnNewVesselCreated);
+
+			GameEvents.onAttemptEva.Remove(OnAttemptEVA);
+			GameEvents.onFlightReady.Remove(OnFlightReady);
+			GameEvents.onVesselGoOffRails.Remove(OnVesselGoOffRails);
+
 			// Switch tourists back
 			try {
 				Log.dbg("VesselsLoaded: {0}", FlightGlobals.VesselsLoaded);
@@ -148,20 +162,6 @@ namespace KourageousTourists
 			catch(Exception e) {
 				Log.error(e, "Got Exception while attempting to access loaded vessels");
 			}
-
-			GameEvents.onVesselRecovered.Remove(OnVesselRecoveredOffGame);
-			GameEvents.onKerbalLevelUp.Remove(OnKerbalLevelUp);
-			GameEvents.onCrewOnEva.Remove(OnEvaStart);
-			GameEvents.onCrewBoardVessel.Remove(OnCrewBoardVessel);
-			GameEvents.onVesselWillDestroy.Remove(OnVesselWillDestroy);
-			GameEvents.onVesselLoaded.Remove(OnVesselLoad);
-			GameEvents.onVesselChange.Remove(OnVesselChange);
-			GameEvents.onVesselCreate.Remove(OnVesselCreate);
-			GameEvents.onNewVesselCreated.Remove(OnNewVesselCreated);
-
-			GameEvents.onAttemptEva.Remove(OnAttemptEVA);
-			GameEvents.onFlightReady.Remove(OnFlightReady);
-			GameEvents.onVesselGoOffRails.Remove(OnVesselGoOffRails);
 		}
 
 		private void OnEvaStart(GameEvents.FromToAction<Part, Part> evaData) {
