@@ -1,5 +1,8 @@
 # Kourageous Tourists /L :: Change Log
 
+* 2022-1128: 0.6.0.1 (Lisias) for KSP >= 1.3
+	+ Replaces KSPe external dependency with embedded KSPe.Light
+	+ Kourageous Tourists /L goes gold!  **#HURRAY!!**
 * 2022-0829: 0.6.0.0 (Lisias) for KSP >= 1.3 **BETA**
 	+ First release under Lisias' stewardship! **#HURRAY!!**
 	+ Enhancements since the last official release:
