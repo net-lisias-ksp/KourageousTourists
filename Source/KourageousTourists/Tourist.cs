@@ -63,8 +63,7 @@ namespace KourageousTourists
 		}
 
 		public static bool isTourist(ProtoCrewMember crew) {
-		
-			return crew.trait.Equals (KerbalRoster.touristTrait);
+			return crew.trait.Equals(KerbalRoster.touristTrait);
 		}
 
 		public void generateEmotion() {

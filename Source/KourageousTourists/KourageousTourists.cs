@@ -247,11 +247,11 @@ namespace KourageousTourists
 
 			Log.dbg("entered KourageousTourists OnAttemptEVA");
 
-			Tourist t;
-			if (!tourists.TryGetValue (crewMemeber.name, out t))
+			if (!Tourist.isTourist(crewMemeber)) // crew always can EVA
 				return;
 
-			if (!Tourist.isTourist (crewMemeber)) // crew always can EVA
+			Tourist t;
+			if (!tourists.TryGetValue (crewMemeber.name, out t))
 				return;
 
 			Vessel v = FlightGlobals.ActiveVessel;
