@@ -242,16 +242,23 @@ namespace KourageousTourists
 		}
 
 		private void OnAttemptEVA(ProtoCrewMember crewMemeber, Part part, Transform transform) {
+			Log.dbg("entered KourageousTourists OnAttemptEVA");
+
+			#if debug
+			if (null == crewMemeber) Log.dbg("OnAttemptEVA null crewmember");
+			if (null == part) Log.dbg("OnAttemptEVA null part");
+			if (null == transform) Log.dbg("OnAttemptEVA null transform");
+			#endif
 
 			// Can we be sure that all in-scene kerbal tourists were configured?
 
-			Log.dbg("entered KourageousTourists OnAttemptEVA");
+			Log.dbg("entered KourageousTourists OnAttemptEVA for {0}", crewMemeber.nameWithGender);
 
 			if (!Tourist.isTourist(crewMemeber)) // crew always can EVA
 				return;
 
 			Tourist t;
-			if (!tourists.TryGetValue (crewMemeber.name, out t))
+			if (!tourists.TryGetValue(crewMemeber.name, out t))
 				return;
 
 			Vessel v = FlightGlobals.ActiveVessel;
