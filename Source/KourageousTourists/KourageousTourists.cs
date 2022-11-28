@@ -43,13 +43,12 @@ namespace KourageousTourists
 		public Dictionary<String, Tourist> tourists = null;
 
 		public DateTime selfieTime;
+		private int selfieState = -1;
 
 		public Vector3 savedCameraPosition;
 		public Quaternion savedCameraRotation;
 		public Transform savedCameraTarget;
 
-		bool smile = false;
-		bool taken = false;
 		private FXGroup fx = null;
 
 		public double RCSamount;
@@ -87,7 +86,8 @@ namespace KourageousTourists
 			if (tourists == null)
 				tourists = new Dictionary<String, Tourist> ();
 
-			selfieTime = DateTime.Now;
+			this.selfieTime = DateTime.Now;
+			this.selfieState = -1;
 
 			Log.dbg("Setting handlers");
 
@@ -123,8 +123,6 @@ namespace KourageousTourists
 			GameEvents.OnVesselRecoveryRequested.Remove(OnVesselRecoveryRequested);
 
 			tourists = null;
-			smile = false;
-			taken = false;
 			fx = null;
 
 			if (!HighLogic.LoadedSceneIsFlight) return;
@@ -567,36 +565,40 @@ namespace KourageousTourists
 
 			checkApproachingGeeLimit ();
 
-			if (!smile)
-				return;
-
+			if (this.selfieState < 0) return;
 			int sec = (DateTime.Now - selfieTime).Seconds;
-			if (!taken && 0 == sec)
+			if (0 == this.selfieState)
 			{
+				ScreenMessages.PostScreenMessage("Say CHEEEESE!!! :)");
 				String fname = this.generateSelfieFileName();
 				Log.info("Saving selfie to {0}", fname);
 				this.pathname = KSPe.IO.Hierarchy.SCREENSHOT.Solve(fname);
+
+				this.Smile();
+				++this.selfieState;
 			}
-			// The emotions are taking more than a second to be executed by the Kerbal on KSP 1.7.3 . TODO: check other versions! It's something I did on KSPe, perhaps?
-			if (!taken && 2 == sec)
+
+			if (1 == this.selfieState && sec >= 1)
 			{
+				GameEvents.onHideUI.Fire();
 				Log.dbg("Getting snd");
 				FXGroup snd = getOrCreateAudio(FlightGlobals.ActiveVessel.evaController.gameObject);
 				if (snd != null) {
 					snd.audio.Play ();
 				}
 				else Log.warn("snd is null");
+				++this.selfieState;
 			}
 
-			if (!taken && 3 == sec)
-			{ // The emotions are taking more than a second to be executed by the Kerbal on KSP 1.7.3 . TODO: check other versions!
+			if (2 == this.selfieState && sec >= 2)
+			{
 				KSPe.Util.Image.Screenshot.Capture(this.pathname);
-				taken = true;
+				++this.selfieState;
 			}
 
-			if (sec > 5) {
-				smile = false;
-				taken = false;
+			if (3 == this.selfieState && sec >= 4)
+			{
+				this.selfieState = -1;
 
 				/*FlightCamera camera = FlightCamera.fetch;
 				camera.transform.position = savedCameraPosition;
@@ -604,23 +606,20 @@ namespace KourageousTourists
 				camera.SetTarget (savedCameraTarget, FlightCamera.TargetMode.Transform);*/
 
 				//FlightGlobals.ActiveVessel.evaController.part.Events ["TakeSelfie"].active = true;
-				GameEvents.onShowUI.Fire ();
-				ScreenMessages.PostScreenMessage ("Selfie taken!");
+				GameEvents.onShowUI.Fire();
+				ScreenMessages.PostScreenMessage("Selfie taken!");
 			}
-			else
-				Smile ();
 
 		}
 
 		public void TakeSelfie() {
-			ScreenMessages.PostScreenMessage ("Selfie...!");
-			smile = true;
 			selfieTime = DateTime.Now;
+			this.selfieState = 0;
+
 			foreach (Tourist t in tourists.Values)
 				t.generateEmotion ();
 
 			//FlightGlobals.ActiveVessel.evaController.part.Events ["TakeSelfie"].active = false;
-			GameEvents.onHideUI.Fire();
 			Log.detail("Selfie...!");
 
 			/*FlightCamera camera = FlightCamera.fetch;
@@ -633,7 +632,7 @@ namespace KourageousTourists
 		}
 
 		private void Smile() {
-
+			Log.dbg("SAY CHEEEESE!!! :)");
 			foreach (Vessel v in FlightGlobals.Vessels) {
 
 				if (v.evaController == null)
