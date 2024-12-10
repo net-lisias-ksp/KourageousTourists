@@ -36,7 +36,7 @@ using KourageousTourists.Contracts;
 
 namespace KourageousTourists
 {
-	public class TouristFactory
+	public class TouristFactory : KSPe.IO.SaveGameMonitor.SaveGameLoadedListener
 	{
 		public const String cfgRoot = "KOURAGE";
 		public const String cfgNode = "LEVEL";
@@ -120,9 +120,11 @@ namespace KourageousTourists
 				ConfigNode config = GameDatabase.Instance.GetConfigNodes(TouristFactory.cfgRoot).FirstOrDefault();
 				this.readConfig(config);
 			}
+			if (HighLogic.LoadedSceneIsGame)
 			{
-				ConfigNode config = HighLogic.LoadedSceneIsGame ? this.ReadConfigFromSaveGame() : ReadConfigFromDefaults();
+				ConfigNode config = this.ReadConfigFromDefaults();
 				this.readConfig(config);
+				KSPe.IO.SaveGameMonitor.Instance.AddSingleShot(this);
 			}
 		}
 
@@ -201,6 +203,14 @@ namespace KourageousTourists
 			}
 			return true;
 		}
+
+		void KSPe.IO.SaveGameMonitor.SaveGameLoadedListener.OnSaveGameLoaded(string name)
+		{
+			ConfigNode config = this.ReadConfigFromSaveGame();
+			this.readConfig(config);
+		}
+
+		void KSPe.IO.SaveGameMonitor.SaveGameLoadedListener.OnSaveGameClosed() {}
 	}
 }
 

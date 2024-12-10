@@ -66,19 +66,6 @@ namespace KourageousTourists
 		{
 			Log.dbg("entered KourageousTourists Awake scene:{0}", HighLogic.LoadedScene);
 
-			Settings.Instance.Read();
-
-			Log.dbg("highlogic: {0}", HighLogic.fetch);
-			Log.dbg("game: {0}", HighLogic.CurrentGame);
-
-			// Ignore non-career game mode
-			if (HighLogic.CurrentGame == null
-				|| (!Settings.Instance.forceTouristsInSandbox && HighLogic.CurrentGame.Mode != Game.Modes.CAREER))
-			{
-				return;
-			}
-			Log.detail("scene: {0}", HighLogic.LoadedScene);
-
 			GameEvents.OnVesselRecoveryRequested.Add (OnVesselRecoveryRequested);
 
 			if (!HighLogic.LoadedSceneIsFlight) return;
@@ -106,6 +93,24 @@ namespace KourageousTourists
 			GameEvents.onVesselRecovered.Add (OnVesselRecoveredOffGame);
 
 			//reinitCrew (FlightGlobals.ActiveVessel);
+		}
+
+		public void Start()
+		{
+			Log.dbg("entered KourageousTourists Start scene:{0}", HighLogic.LoadedScene);
+
+			Settings.Instance.Read();
+
+			Log.dbg("highlogic: {0}", HighLogic.fetch);
+			Log.dbg("game: {0}", HighLogic.CurrentGame);
+
+			// Ignore non-career game mode
+			if (HighLogic.CurrentGame == null
+				|| (!Settings.Instance.forceTouristsInSandbox && HighLogic.CurrentGame.Mode != Game.Modes.CAREER))
+			{
+				return;
+			}
+			Log.detail("scene: {0}", HighLogic.LoadedScene);
 		}
 
 		public void OnDestroy() {

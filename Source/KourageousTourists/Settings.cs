@@ -29,10 +29,11 @@ using KSPe;
 using Globals = KSPe.Globals<KourageousTourists.Startup>;
 using Asset = KSPe.IO.Asset<KourageousTourists.Startup>;
 using Data = KSPe.IO.Save<KourageousTourists.Startup>;
+using KSPe.IO;
 
 namespace KourageousTourists
 {
-	internal class Settings
+	internal class Settings : KSPe.IO.SaveGameMonitor.SaveGameLoadedListener
 	{
 		public const String cfgRoot = "KOURAGE";
 
@@ -48,19 +49,24 @@ namespace KourageousTourists
 
 		private Settings()
 		{
-			GameEvents.onGameStatePostLoad.Add(this.onGameStateCreated);
+			KSPe.IO.SaveGameMonitor.Instance.Add(this);
 		}
 
 		~Settings()
 		{
-			GameEvents.onGameStatePostLoad.Remove(this.onGameStateCreated);
+			KSPe.IO.SaveGameMonitor.Instance.Remove(this);
 		}
 
-		private void onGameStateCreated(ConfigNode data)
+		void SaveGameMonitor.SaveGameLoadedListener.OnSaveGameLoaded(string name)
 		{
-			Log.dbg("Settings.onGameStateCreated {0}", data.GetValue("Tittle"));
+			Log.dbg("Settings.OnSaveGameLoaded {0}", name);
 			this.VerifySaveGameData();
-			// A new savegame was loaded.
+			this.ReadConfig();
+		}
+
+		void SaveGameMonitor.SaveGameLoadedListener.OnSaveGameClosed()
+		{
+			// The savegame was close.
 			// The current instance is not valid anymore!
 			// Kill ourselves, and let the new generation take over!
 			instance = null;
@@ -75,7 +81,7 @@ namespace KourageousTourists
 
 		private void ReadConfig()
 		{
-			ConfigNodeWithSteroids config = HighLogic.LoadedSceneIsGame ? this.ReadConfigFromSaveGame() : ReadConfigFromDefaults();
+			ConfigNodeWithSteroids config = SaveGameMonitor.Instance.IsValid ? this.ReadConfigFromSaveGame() : ReadConfigFromDefaults();
 			if (config == null)
 			{
 				Log.warn("No config nodes!");
