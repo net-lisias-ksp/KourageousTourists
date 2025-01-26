@@ -1,6 +1,6 @@
 ﻿/*
 	This file is part of Kourageous Tourists /L
-		© 2020-2022 LisiasT : http://lisias.net <support@lisias.net>
+		© 2020-2025 LisiasT : http://lisias.net <support@lisias.net>
 
 	THIS FILE is licensed to you under:
 
