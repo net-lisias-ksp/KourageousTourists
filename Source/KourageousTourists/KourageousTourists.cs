@@ -40,7 +40,7 @@ namespace KourageousTourists
 
 		// We keep every kerbal in scene in here just to make every one of them smile
 		// on photo; some, however, clearly are not tourists
-		public Dictionary<String, Tourist> tourists = null;
+		public readonly Dictionary<String, Tourist> tourists = new Dictionary<string, Tourist>();
 
 		public DateTime selfieTime;
 		private int selfieState = -1;
@@ -70,8 +70,7 @@ namespace KourageousTourists
 
 			if (!HighLogic.LoadedSceneIsFlight) return;
 
-			if (tourists == null)
-				tourists = new Dictionary<String, Tourist> ();
+			this.tourists.Clear(); // Just in case...
 
 			this.selfieTime = DateTime.Now;
 			this.selfieState = -1;
@@ -127,7 +126,7 @@ namespace KourageousTourists
 
 			GameEvents.OnVesselRecoveryRequested.Remove(OnVesselRecoveryRequested);
 
-			tourists = null;
+			this.tourists.Clear();
 			fx = null;
 
 			if (!HighLogic.LoadedSceneIsFlight) return;
@@ -176,11 +175,6 @@ namespace KourageousTourists
 			Log.dbg("vessel: {0}; evaCtl: {1}", v, v.evaController);
 			ProtoCrewMember crew = v.GetVesselCrew () [0];
 			Log.dbg("crew: {0}", crew);
-			if (this.tourists == null) {
-				// Why we get here twice with the same data?
-				Log.dbg("for some reasons tourists is null");
-				return;
-			}
 #if DEBUG
 			foreach(KeyValuePair<String, Tourist> pair in this.tourists)
 				Log.dbg("{0}={1}", pair.Key, pair.Value);
@@ -311,7 +305,7 @@ namespace KourageousTourists
 
 		private void OnKerbalLevelUp(ProtoCrewMember kerbal) {
 
-			if (tourists == null || !tourists.ContainsKey (kerbal.name))
+			if (!this.tourists.ContainsKey (kerbal.name))
 				return;
 			Log.dbg("Leveling up {0}", kerbal.name);
 			// Re-create tourist
@@ -330,8 +324,7 @@ namespace KourageousTourists
 				}
 				return;
 			}
-			if (tourists == null)
-				return;
+
 			foreach (ProtoCrewMember crew in FlightGlobals.ActiveVessel.GetVesselCrew()) {
 				if (!tourists.ContainsKey(crew.name) || // not among tourists
 				    !Tourist.isTourist(crew) || // not really a tourist
@@ -360,11 +353,6 @@ namespace KourageousTourists
 					Log.dbg("Tourist promotion: {0}", crew.name);
 				}
 
-				if (tourists == null) {
-					// TODO: Find out while half of the time we are getting this message
-					Log.dbg("for some reason tourists are null");
-					continue;
-				}
 				if (tourists.ContainsKey (crew.name))
 					continue;
 
