@@ -194,7 +194,7 @@ namespace KourageousTourists
 				Log.dbg("tourist: {0}", t);
 			else
 			{
-				Log.error("{0} is not a Tourist. Aborting!", crew);
+				Log.detail("{0} is not a Tourist. Aborting!", crew);
 				return;
 			}
 
