@@ -486,6 +486,9 @@ namespace KourageousTourists
 
 		private void OnVesselChange(Vessel vessel)
 		{
+			if (null == vessel)
+				Log.warn("OnVesselChange was called with a null vessel value!");
+
 			Log.dbg("entered OnVesselChange={0}", vessel.name);
 			if (vessel.evaController == null)
 				return;
