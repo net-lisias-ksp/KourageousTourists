@@ -1,5 +1,9 @@
 # Kourageous Tourists /L :: Change Log
 
+* 2025-0927: 0.6.0.3 (Lisias) for KSP >= 1.3
+	+ A weird situation where `OnVesselChange` is being called with the `vessel` parameted *nulled* was detected and logged for further diagnosing.
+	+ A code compliance change to prevent NREs were added, preventing as side effect the collateral damages of the `OnVesselChange` weirdness documented above.
+	+ Reducing a bit the log spam.
 * 2025-0125: 0.6.0.2 (Lisias) for KSP >= 1.3
 	+ Updating libraries.
 * 2022-1128: 0.6.0.1 (Lisias) for KSP >= 1.3
