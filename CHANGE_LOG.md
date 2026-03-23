@@ -1,5 +1,7 @@
 # Kourageous Tourists /L :: Change Log
 
+* 2026-0322: 0.6.0.4 (Lisias) for KSP >= 1.3
+	+ Updates `KSPe.Light` to 2.5.5.2, fixing a lame mistake that prevented it from working on KSP < 1.8.0 🤦
 * 2025-0927: 0.6.0.3 (Lisias) for KSP >= 1.3
 	+ A weird situation where `OnVesselChange` is being called with the `vessel` parameted *nulled* was detected and logged for further diagnosing.
 	+ A code compliance change to prevent NREs were added, preventing as side effect the collateral damages of the `OnVesselChange` weirdness documented above.
