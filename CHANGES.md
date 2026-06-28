@@ -1,5 +1,7 @@
 # Kourageous Tourists /L :: Changes
 
+* 2026-0628: 0.6.0.5 (Lisias) for KSP >= 1.3
+	+ Updates `KSPe.Light`, fixing a weird and elusive bug that was hindering the per savegame Settings.
 * 2026-0322: 0.6.0.4 (Lisias) for KSP >= 1.3
 	+ Updates `KSPe.Light` to 2.5.5.2, fixing a lame mistake that prevented it from working on KSP < 1.8.0 🤦
 * 2025-0927: 0.6.0.3 (Lisias) for KSP >= 1.3
